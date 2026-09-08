@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rút gọn link Google Drive từ Excel</title>
+    <title>Rút gọn link từ Excel</title>
     <style>
         * {
             box-sizing: border-box;
@@ -46,7 +46,6 @@
             line-height: 1.5;
         }
         
-        /* Stats header - đưa lên đầu trang */
         .stats-header {
             display: flex;
             flex-wrap: wrap;
@@ -71,31 +70,13 @@
             border-radius: 30px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
-        .stats-item .icon {
-            font-size: 18px;
-        }
-        .stats-item .count {
-            font-weight: 700;
-            font-size: 17px;
-        }
-        .stats-item .label {
-            color: #64748b;
-            font-weight: 400;
-        }
-        .stats-item.success .count {
-            color: #059669;
-        }
-        .stats-item.warning .count {
-            color: #dc2626;
-        }
-        .stats-item.info .count {
-            color: #2563eb;
-        }
-        .stats-divider {
-            width: 1px;
-            height: 30px;
-            background: #e2e8f0;
-        }
+        .stats-item .icon { font-size: 18px; }
+        .stats-item .count { font-weight: 700; font-size: 17px; }
+        .stats-item .label { color: #64748b; font-weight: 400; }
+        .stats-item.success .count { color: #059669; }
+        .stats-item.warning .count { color: #dc2626; }
+        .stats-item.info .count { color: #2563eb; }
+        .stats-divider { width: 1px; height: 30px; background: #e2e8f0; }
         
         .toolbar {
             display: flex;
@@ -126,53 +107,20 @@
             transition: all 0.2s;
             border: 1px solid transparent;
         }
-        .btn-primary {
-            background: #1e293b;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #0f172a;
-        }
-        .btn-success {
-            background: #059669;
-            color: white;
-        }
-        .btn-success:hover {
-            background: #047857;
-        }
-        .btn-warning {
-            background: #d97706;
-            color: white;
-        }
-        .btn-warning:hover {
-            background: #b45309;
-        }
-        .btn-info {
-            background: #2563eb;
-            color: white;
-        }
-        .btn-info:hover {
-            background: #1d4ed8;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #cbd5e1;
-        }
-        .btn-outline:hover {
-            background: #f1f5f9;
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        .stats {
-            font-size: 14px;
-            color: #475569;
-            background: #f1f5f9;
-            padding: 5px 16px;
-            border-radius: 30px;
-            white-space: nowrap;
-        }
+        .btn-primary { background: #1e293b; color: white; }
+        .btn-primary:hover { background: #0f172a; }
+        .btn-success { background: #059669; color: white; }
+        .btn-success:hover { background: #047857; }
+        .btn-warning { background: #d97706; color: white; }
+        .btn-warning:hover { background: #b45309; }
+        .btn-info { background: #2563eb; color: white; }
+        .btn-info:hover { background: #1d4ed8; }
+        .btn-purple { background: #7c3aed; color: white; }
+        .btn-purple:hover { background: #6d28d9; }
+        .btn-outline { background: transparent; border: 1px solid #cbd5e1; }
+        .btn-outline:hover { background: #f1f5f9; }
+        .btn:disabled { opacity: 0.5; pointer-events: none; }
+        
         .table-wrap {
             overflow-x: auto;
             border-radius: 16px;
@@ -183,7 +131,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
-            min-width: 500px;
+            min-width: 600px;
         }
         th {
             background: #f8fafc;
@@ -202,12 +150,10 @@
             vertical-align: middle;
             word-break: break-word;
         }
-        tr:hover td {
-            background: #fafcff;
-        }
-        .col-rutgon {
-            min-width: 200px;
-        }
+        tr:hover td { background: #fafcff; }
+        .col-rutgon { min-width: 200px; }
+        .col-carrier { min-width: 100px; }
+        
         .status-badge {
             display: inline-block;
             padding: 3px 12px;
@@ -215,31 +161,32 @@
             font-size: 12px;
             font-weight: 500;
         }
-        .status-ready {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-        .status-done {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        .status-error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        .status-processing {
-            background: #fef9c3;
-            color: #854d0e;
-        }
+        .status-ready { background: #dbeafe; color: #1d4ed8; }
+        .status-done { background: #d1fae5; color: #065f46; }
+        .status-error { background: #fee2e2; color: #991b1b; }
+        .status-processing { background: #fef9c3; color: #854d0e; }
+        
         .short-link {
             color: #059669;
             font-weight: 500;
             text-decoration: none;
             font-size: 13px;
         }
-        .short-link:hover {
-            text-decoration: underline;
+        .short-link:hover { text-decoration: underline; }
+        
+        .carrier-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
         }
+        .carrier-viettel { background: #dbeafe; color: #1d4ed8; }
+        .carrier-vinaphone { background: #d1fae5; color: #065f46; }
+        .carrier-mobifone { background: #fef3c7; color: #92400e; }
+        .carrier-vietnamobile { background: #fce7f3; color: #9d174d; }
+        .carrier-khac { background: #f1f5f9; color: #64748b; }
+        
         .footer-actions {
             margin-top: 25px;
             display: flex;
@@ -284,24 +231,12 @@
             z-index: 999;
             max-width: 90%;
         }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .toast.success {
-            background: #059669;
-        }
-        .toast.error {
-            background: #b91c1c;
-        }
-        .phone-valid {
-            color: #059669;
-            font-weight: 500;
-        }
-        .phone-invalid {
-            color: #dc2626;
-            font-weight: 600;
-        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: #059669; }
+        .toast.error { background: #b91c1c; }
+        
+        .phone-valid { color: #059669; font-weight: 500; }
+        .phone-invalid { color: #dc2626; font-weight: 600; }
         .phone-warning {
             color: #dc2626;
             font-weight: 700;
@@ -309,21 +244,44 @@
             padding: 2px 8px;
             border-radius: 4px;
         }
-        .phone-fixed {
+        .warning-icon { color: #dc2626; font-weight: 700; font-size: 16px; margin-left: 4px; }
+        
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            background: #f8fafc;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .drop-zone:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        .drop-zone.dragover {
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+        .drop-zone .icon-big {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .drop-zone p {
+            color: #64748b;
+            font-size: 15px;
+        }
+        .drop-zone .highlight {
             color: #2563eb;
-            font-weight: 500;
+            font-weight: 600;
         }
-        .warning-icon {
-            color: #dc2626;
-            font-weight: 700;
-            font-size: 16px;
-            margin-left: 4px;
-        }
+        
         @media (max-width: 700px) {
             .container { padding: 16px; }
             .toolbar { flex-direction: column; align-items: stretch; }
             .left-group { flex-wrap: wrap; }
-            .stats { white-space: normal; }
             td, th { padding: 10px 12px; font-size: 13px; }
             .stats-header { flex-direction: column; align-items: stretch; gap: 10px; }
             .stats-item { justify-content: center; }
@@ -336,10 +294,16 @@
 <div class="container">
     <h1>📎 RÚT GỌN LINK</h1>
     <div class="sub">
-        🔹 Dữ liệu từ file <strong>SMS SLSS 07092026.xlsx</strong><br>
             </div>
 
-    <!-- Stats Header - Đưa lên đầu trang -->
+    <!-- Drop Zone -->
+    <div class="drop-zone" id="dropZone">
+        <span class="icon-big">📂</span>
+        <p><span class="highlight">Click để chọn</span> hoặc kéo thả file Excel vào đây</p>
+        <p style="font-size:13px; color:#94a3b8; margin-top:5px;">Hỗ trợ: .xlsx, .xls</p>
+    </div>
+
+    <!-- Stats Header -->
     <div class="stats-header" id="statsHeader">
         <div class="stats-item success">
             <span class="icon">✅</span>
@@ -366,10 +330,10 @@
 
     <div class="toolbar">
         <div class="left-group">
-            <button class="btn btn-primary" id="btnLoadExcel">📂 Tải file Excel</button>
             <button class="btn btn-success" id="btnShortenAll" disabled>⚡ Rút gọn tất cả</button>
-            <button class="btn btn-info" id="btnFixPhone">📱 Chuẩn hóa SĐT</button>
-            <button class="btn btn-warning" id="btnExportExcel">📥 Xuất Excel</button>
+            <button class="btn btn-info" id="btnFixPhone" disabled>📱 Chuẩn hóa SĐT</button>
+            <button class="btn btn-purple" id="btnExportZip" disabled>📦 Xuất ZIP theo nhà mạng</button>
+            <button class="btn btn-warning" id="btnExportExcel" disabled>📥 Xuất Excel gốc</button>
         </div>
         <div>
             <button class="btn btn-outline" id="btnReset">🔄 Đặt lại</button>
@@ -384,14 +348,15 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width:30%">Họ tên</th>
-                    <th style="width:25%">SĐT</th>
-                    <th style="width:45%">Link rút gọn (cột C)</th>
+                    <th style="width:20%">Họ tên</th>
+                    <th style="width:18%">SĐT</th>
+                    <th style="width:12%">Nhà mạng</th>
+                    <th style="width:50%">Link rút gọn (cột C)</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <tr><td colspan="3" style="text-align:center; color:#94a3b8; padding:40px 0;">
-                    ⬆️ Nhấn "Tải file Excel" để bắt đầu
+                <tr><td colspan="4" style="text-align:center; color:#94a3b8; padding:40px 0;">
+                    ⬆️ Kéo thả hoặc click vào vùng bên trên để tải file Excel
                 </td></tr>
             </tbody>
         </table>
@@ -410,36 +375,40 @@
 <!-- Toast thông báo -->
 <div id="toast" class="toast"></div>
 
+<!-- Thư viện -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 <script>
     (function() {
+        'use strict';
+
         // ---------- STATE ----------
         let tableData = [];
         let isProcessing = false;
-        let originalFileName = 'SMS SLSS 07092026.xlsx';
+        let originalFileName = '';
 
         // DOM refs
         const tbody = document.getElementById('tableBody');
-        const btnLoad = document.getElementById('btnLoadExcel');
+        const dropZone = document.getElementById('dropZone');
         const btnShortenAll = document.getElementById('btnShortenAll');
         const btnFixPhone = document.getElementById('btnFixPhone');
+        const btnExportZip = document.getElementById('btnExportZip');
         const btnExportExcel = document.getElementById('btnExportExcel');
         const btnReset = document.getElementById('btnReset');
         const progressFill = document.getElementById('progressFill');
         const toast = document.getElementById('toast');
         
-        // Header stats
         const headerShortCount = document.getElementById('headerShortCount');
         const headerPhoneCount = document.getElementById('headerPhoneCount');
         const headerWarningCount = document.getElementById('headerWarningCount');
         const headerTotalCount = document.getElementById('headerTotalCount');
         
-        // Footer stats (giữ lại để tham khảo)
         const counterShort = document.getElementById('counterShort');
         const counterPhone = document.getElementById('counterPhone');
         const counterWarning = document.getElementById('counterWarning');
 
-        // ---------- HELPER: Toast ----------
+        // ---------- TOAST ----------
         let toastTimer = null;
         function showToast(message, type = 'info', duration = 3000) {
             toast.textContent = message;
@@ -453,75 +422,127 @@
             }, duration);
         }
 
-        // ---------- PHONE VALIDATION & FIX ----------
+        // ---------- XÁC ĐỊNH NHÀ MẠNG (THEO CODE APP.PY) ----------
+        function getNetwork(phone) {
+            if (!phone || phone.length < 5) return "Khac";
+            let p = String(phone).replace(/[^0-9]/g, '');
+            
+            // Nếu bắt đầu bằng 84, giữ nguyên
+            if (p.startsWith('84')) {
+                let pre = p.substring(0, 4);
+                
+                // Viettel
+                if (['8432','8433','8434','8435','8436','8437','8438','8439','8486','8496','8497','8498'].includes(pre)) {
+                    return 'Viettel';
+                }
+                // MobiFone
+                if (['8470','8476','8477','8478','8479','8489','8493'].includes(pre)) {
+                    return 'MobiFone';
+                }
+                // VinaPhone
+                if (['8481','8482','8483','8484','8485','8488','8491','8494','8490'].includes(pre)) {
+                    return 'VinaPhone';
+                }
+                // Vietnamobile
+                if (['8452','8456','8458','8492'].includes(pre)) {
+                    return 'Vietnamobile';
+                }
+                return 'Khac';
+            }
+            
+            // Nếu bắt đầu bằng 0, chuyển thành 84 rồi kiểm tra
+            if (p.startsWith('0')) {
+                p = '84' + p.substring(1);
+                let pre = p.substring(0, 4);
+                
+                if (['8432','8433','8434','8435','8436','8437','8438','8439','8486','8496','8497','8498'].includes(pre)) {
+                    return 'Viettel';
+                }
+                if (['8470','8476','8477','8478','8479','8489','8493'].includes(pre)) {
+                    return 'MobiFone';
+                }
+                if (['8481','8482','8483','8484','8485','8488','8491','8494','8490'].includes(pre)) {
+                    return 'VinaPhone';
+                }
+                if (['8452','8456','8458','8492'].includes(pre)) {
+                    return 'Vietnamobile';
+                }
+                return 'Khac';
+            }
+            
+            // Nếu số có 10 số, thêm 84 vào đầu
+            if (p.length === 10) {
+                p = '84' + p;
+                let pre = p.substring(0, 4);
+                
+                if (['8432','8433','8434','8435','8436','8437','8438','8439','8486','8496','8497','8498'].includes(pre)) {
+                    return 'Viettel';
+                }
+                if (['8470','8476','8477','8478','8479','8489','8493'].includes(pre)) {
+                    return 'MobiFone';
+                }
+                if (['8481','8482','8483','8484','8485','8488','8491','8494','8490'].includes(pre)) {
+                    return 'VinaPhone';
+                }
+                if (['8452','8456','8458','8492'].includes(pre)) {
+                    return 'Vietnamobile';
+                }
+                return 'Khac';
+            }
+            
+            return 'Khac';
+        }
+
+        // ---------- PHONE VALIDATION ----------
         function validateAndFixPhone(phone) {
             if (!phone) return { valid: false, fixed: '', message: 'Trống', status: 'empty' };
             
-            // Xóa tất cả ký tự không phải số
             let clean = String(phone).replace(/[^0-9]/g, '');
-            
-            // Nếu rỗng sau khi lọc
             if (!clean) return { valid: false, fixed: '', message: 'Không có số', status: 'empty' };
             
-            // Xử lý số bắt đầu bằng 84 (đã có mã quốc gia)
             if (clean.startsWith('84')) {
                 if (clean.length === 11) {
                     return { valid: true, fixed: clean, message: 'Hợp lệ (84)', status: 'valid' };
                 }
                 if (clean.length === 12) {
-                    // 84 + 10 số = 12 số -> cảnh báo (có thể thừa 1 số)
                     return { valid: false, fixed: clean, message: '⚠️ 12 số (có 84)', status: 'warning_12' };
-                }
-                if (clean.length === 10 && clean.startsWith('84')) {
-                    return { valid: false, fixed: clean, message: '⚠️ Thiếu số (84)', status: 'warning' };
                 }
                 return { valid: false, fixed: clean, message: '⚠️ Không hợp lệ (84)', status: 'invalid' };
             }
             
-            // Xử lý số bắt đầu bằng 0 (10 số)
             if (clean.startsWith('0')) {
                 if (clean.length === 10) {
                     let fixed = '84' + clean.substring(1);
                     return { valid: true, fixed: fixed, message: 'Đã chuyển (0→84)', status: 'valid' };
                 } else if (clean.length === 11) {
-                    // Số 11 số bắt đầu bằng 0 (đầu số mới) -> cảnh báo
                     return { valid: false, fixed: clean, message: '⚠️ 11 số (có 0)', status: 'warning_11' };
                 } else {
                     return { valid: false, fixed: clean, message: '⚠️ Không hợp lệ (0)', status: 'invalid' };
                 }
             }
             
-            // Xử lý số không bắt đầu bằng 0 hoặc 84
             if (clean.length === 9) {
                 let fixed = '84' + clean;
                 return { valid: true, fixed: fixed, message: 'Đã thêm 84', status: 'valid' };
             } else if (clean.length === 10) {
                 let fixed = '84' + clean;
-                // Nếu sau khi thêm 84 mà thành 12 số (84 + 10 số) -> cảnh báo
                 if (fixed.length === 12) {
                     return { valid: false, fixed: fixed, message: '⚠️ 12 số (thêm 84)', status: 'warning_12' };
                 }
                 return { valid: true, fixed: fixed, message: 'Đã thêm 84', status: 'valid' };
-            } else if (clean.length === 11) {
-                // Số 11 số không có 0 và 84 -> thêm 84 thành 13 số -> cảnh báo
-                let fixed = '84' + clean;
-                return { valid: false, fixed: fixed, message: '⚠️ 13 số (thêm 84)', status: 'warning' };
             } else {
                 return { valid: false, fixed: clean, message: '⚠️ Không hợp lệ', status: 'invalid' };
             }
         }
 
-        // ---------- FIX ALL PHONE NUMBERS ----------
+        // ---------- FIX PHONES ----------
         function fixAllPhones() {
             if (!tableData.length) {
                 showToast('Không có dữ liệu.', 'error');
                 return;
             }
 
-            let fixedCount = 0;
-            let invalidCount = 0;
-            let warningCount = 0;
-            let validCount = 0;
+            let validCount = 0, warningCount = 0, invalidCount = 0;
 
             for (let row of tableData) {
                 if (!row.SoDT) continue;
@@ -531,22 +552,23 @@
                 if (result.valid) {
                     row.SoDT = result.fixed;
                     row.phoneStatus = 'valid';
-                    fixedCount++;
                     validCount++;
-                } else {
-                    if (result.status === 'warning_12' || result.status === 'warning_11' || result.status === 'warning') {
-                        row.phoneStatus = 'warning';
-                        warningCount++;
-                    } else {
-                        row.phoneStatus = 'invalid';
-                        invalidCount++;
-                    }
+                } else if (result.status === 'warning_12' || result.status === 'warning_11' || result.status === 'warning') {
+                    row.phoneStatus = 'warning';
+                    warningCount++;
                     row.SoDT = result.fixed;
+                } else {
+                    row.phoneStatus = 'invalid';
+                    invalidCount++;
+                    row.SoDT = result.fixed || row.SoDT;
                 }
+                
+                // Cập nhật lại nhà mạng sau khi chuẩn hóa số
+                row.NhaMang = getNetwork(row.SoDT);
             }
 
             renderTable();
-            showToast(`Đã xử lý: ${validCount} số hợp lệ, ${warningCount} số cảnh báo (12 số), ${invalidCount} số không hợp lệ.`, 'success');
+            showToast(`Đã xử lý: ${validCount} số hợp lệ, ${warningCount} số cảnh báo, ${invalidCount} số không hợp lệ.`, 'success');
             updateStats();
         }
 
@@ -557,25 +579,30 @@
             const validPhones = tableData.filter(r => r.phoneStatus === 'valid').length;
             const warningPhones = tableData.filter(r => r.phoneStatus === 'warning').length;
             
-            // Update header stats
             headerShortCount.textContent = shortened;
             headerPhoneCount.textContent = validPhones;
             headerWarningCount.textContent = warningPhones;
             headerTotalCount.textContent = total;
             
-            // Update footer stats
             counterShort.textContent = `Đã rút gọn: ${shortened}`;
             counterPhone.textContent = `SĐT hợp lệ: ${validPhones}`;
             counterWarning.textContent = `⚠️ SĐT cảnh báo: ${warningPhones}`;
+            
+            const hasData = tableData.length > 0;
+            const hasValidPhones = tableData.some(r => r.phoneStatus === 'valid' && r.linkRutGon);
+            
+            btnShortenAll.disabled = !hasData || isProcessing;
+            btnFixPhone.disabled = !hasData || isProcessing;
+            btnExportZip.disabled = !hasValidPhones || isProcessing;
+            btnExportExcel.disabled = !hasData || isProcessing;
         }
 
         // ---------- RENDER TABLE ----------
         function renderTable() {
             if (!tableData.length) {
-                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#94a3b8; padding:40px 0;">
-                    ⬆️ Nhấn "Tải file Excel" để bắt đầu
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8; padding:40px 0;">
+                    ⬆️ Kéo thả hoặc click vào vùng bên trên để tải file Excel
                 </td></tr>`;
-                btnShortenAll.disabled = true;
                 updateStats();
                 return;
             }
@@ -590,9 +617,7 @@
                 else if (status === 'processing') statusBadge = `<span class="status-badge status-processing">⏳ Đang rút...</span>`;
                 else if (status === 'done') statusBadge = `<span class="status-badge status-done">✓ Đã rút gọn</span>`;
                 else if (status === 'error') statusBadge = `<span class="status-badge status-error">⚠️ Lỗi</span>`;
-                else statusBadge = `<span class="status-badge status-ready">Sẵn sàng</span>`;
 
-                // Hiển thị số điện thoại với trạng thái
                 let phoneDisplay = '';
                 if (row.SoDT) {
                     if (row.phoneStatus === 'valid') {
@@ -601,17 +626,24 @@
                         const is12Digit = row.SoDT.length === 12 && row.SoDT.startsWith('84');
                         const is11Digit = row.SoDT.length === 11 && row.SoDT.startsWith('0');
                         let warningMsg = '⚠️ Cảnh báo';
-                        if (is12Digit) {
-                            warningMsg = '⚠️ 12 số !';
-                        } else if (is11Digit) {
-                            warningMsg = '⚠️ 11 số !';
-                        }
+                        if (is12Digit) warningMsg = '⚠️ 12 số !';
+                        else if (is11Digit) warningMsg = '⚠️ 11 số !';
                         phoneDisplay = `<span class="phone-warning">${escapeHtml(row.SoDT)} <span class="warning-icon">${warningMsg}</span></span>`;
                     } else {
                         phoneDisplay = `<span class="phone-invalid">${escapeHtml(row.SoDT)} <span class="warning-icon">⚠️</span></span>`;
                     }
                 } else {
                     phoneDisplay = `<span style="color:#94a3b8;">—</span>`;
+                }
+
+                // Hiển thị nhà mạng với màu sắc
+                let carrierDisplay = '';
+                if (row.NhaMang) {
+                    const carrierClass = getCarrierClass(row.NhaMang);
+                    const displayName = row.NhaMang === 'Khac' ? 'Khác' : row.NhaMang;
+                    carrierDisplay = `<span class="carrier-badge ${carrierClass}">${escapeHtml(displayName)}</span>`;
+                } else {
+                    carrierDisplay = `<span style="color:#94a3b8;">—</span>`;
                 }
 
                 const linkRutGonDisplay = row.linkRutGon 
@@ -621,19 +653,29 @@
                 html += `<tr>
                     <td><strong>${escapeHtml(row.HoTen || '')}</strong></td>
                     <td>${phoneDisplay}</td>
+                    <td class="col-carrier">${carrierDisplay}</td>
                     <td class="col-rutgon">${linkRutGonDisplay} ${statusBadge}</td>
                 </tr>`;
             }
             tbody.innerHTML = html;
-            btnShortenAll.disabled = (tableData.length === 0 || isProcessing);
             
-            // update progress
             const total = tableData.length;
             const done = tableData.filter(r => r.status === 'done' || r.status === 'error').length;
             const pct = total ? Math.round((done / total) * 100) : 0;
             progressFill.style.width = pct + '%';
             
             updateStats();
+        }
+
+        function getCarrierClass(carrier) {
+            const map = {
+                'Viettel': 'carrier-viettel',
+                'VinaPhone': 'carrier-vinaphone',
+                'MobiFone': 'carrier-mobifone',
+                'Vietnamobile': 'carrier-vietnamobile',
+                'Khac': 'carrier-khac'
+            };
+            return map[carrier] || 'carrier-khac';
         }
 
         function escapeHtml(text) {
@@ -649,8 +691,16 @@
 
         // ---------- LOAD EXCEL ----------
         function loadExcelFile(file) {
+            const validExtensions = ['.xlsx', '.xls'];
+            const fileExt = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            if (!validExtensions.includes(fileExt)) {
+                showToast('Vui lòng chọn file Excel (.xlsx hoặc .xls)', 'error');
+                return;
+            }
+
             originalFileName = file.name;
             const reader = new FileReader();
+            
             reader.onload = function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
@@ -664,6 +714,8 @@
                     }
 
                     const headers = Object.keys(json[0]);
+                    console.log('📋 Các cột trong file:', headers);
+                    
                     const colHoTen = headers.find(h => h.trim() === 'HoTen') || headers[0];
                     const colSoDT = headers.find(h => h.trim() === 'SoDT') || headers[1];
                     const colRutGon = headers.find(h => h.trim() === 'linh rut gon') || headers[2];
@@ -682,17 +734,22 @@
                         
                         let soDT = String(row[colSoDT] || '').trim();
                         let phoneStatus = 'unknown';
+                        let carrier = 'Khac';
+                        
                         if (soDT) {
                             const result = validateAndFixPhone(soDT);
                             if (result.valid) {
                                 phoneStatus = 'valid';
                                 soDT = result.fixed;
+                                carrier = getNetwork(soDT);
                             } else if (result.status === 'warning_12' || result.status === 'warning_11' || result.status === 'warning') {
                                 phoneStatus = 'warning';
                                 soDT = result.fixed;
+                                carrier = getNetwork(soDT);
                             } else {
                                 phoneStatus = 'invalid';
                                 soDT = result.fixed || soDT;
+                                carrier = getNetwork(soDT);
                             }
                         }
                         
@@ -702,6 +759,7 @@
                             SoDT: soDT,
                             linkGoc: linkGoc,
                             linkRutGon: linkRutGon,
+                            NhaMang: carrier,
                             status: status,
                             phoneStatus: phoneStatus
                         });
@@ -715,16 +773,35 @@
 
                     tableData = filtered;
                     renderTable();
-                    showToast(`Đã tải ${tableData.length} dòng từ Excel.`, 'success');
+                    
+                    // Thống kê nhà mạng
+                    const carrierStats = {};
+                    for (let row of tableData) {
+                        if (row.NhaMang) {
+                            carrierStats[row.NhaMang] = (carrierStats[row.NhaMang] || 0) + 1;
+                        }
+                    }
+                    let statsMsg = `📊 Đã tải ${tableData.length} dòng. `;
+                    for (const [carrier, count] of Object.entries(carrierStats)) {
+                        const displayName = carrier === 'Khac' ? 'Khác' : carrier;
+                        statsMsg += `${displayName}: ${count}, `;
+                    }
+                    showToast(statsMsg, 'success');
+                    
                 } catch (err) {
-                    console.error(err);
+                    console.error('Lỗi đọc file:', err);
                     showToast('Lỗi đọc file Excel: ' + err.message, 'error');
                 }
             };
+            
+            reader.onerror = function() {
+                showToast('Không thể đọc file. Vui lòng thử lại.', 'error');
+            };
+            
             reader.readAsArrayBuffer(file);
         }
 
-        // ---------- SHORTEN ONE (TinyURL) ----------
+        // ---------- SHORTEN ----------
         async function shortenLink(link) {
             if (!link) return { success: false, error: 'Link trống' };
             try {
@@ -760,8 +837,7 @@
             btnShortenAll.disabled = true;
             showToast(`Đang rút gọn ${toShorten.length} link...`, 'info', 2000);
 
-            let successCount = 0;
-            let failCount = 0;
+            let successCount = 0, failCount = 0;
 
             for (let i = 0; i < toShorten.length; i++) {
                 const row = toShorten[i];
@@ -779,7 +855,6 @@
                 } else {
                     tableData[originalIndex].status = 'error';
                     failCount++;
-                    console.warn(`Lỗi rút gọn cho ${row.HoTen}: ${result.error}`);
                 }
                 renderTable();
                 await new Promise(r => setTimeout(r, 300));
@@ -791,10 +866,122 @@
             showToast(`Hoàn thành: ${successCount} link rút gọn, ${failCount} lỗi.`, successCount > 0 ? 'success' : 'error');
         }
 
-        // ---------- EXPORT EXCEL ----------
-        function exportExcel() {
+        // ---------- EXPORT ZIP THEO NHÀ MẠNG (BAO GỒM KHAC) ----------
+        function exportZipByCarrier() {
             if (!tableData.length) {
+                showToast('Không có dữ liệu.', 'error');
+                return;
+            }
+
+            // Lọc các số hợp lệ và có link rút gọn
+            const validData = tableData.filter(r => r.phoneStatus === 'valid' && r.linkRutGon && r.SoDT);
+            
+            if (!validData.length) {
+                showToast('Không có số điện thoại hợp lệ và link rút gọn để xuất.', 'error');
+                return;
+            }
+
+            // Phân loại theo nhà mạng (bao gồm cả Khac)
+            const carriers = {};
+            let totalCount = 0;
+
+            for (let row of validData) {
+                let carrier = row.NhaMang || 'Khac';
+                if (!carriers[carrier]) {
+                    carriers[carrier] = [];
+                }
+                carriers[carrier].push({
+                    phone: row.SoDT,
+                    link: row.linkRutGon
+                });
+                totalCount++;
+            }
+
+            // Kiểm tra xem có dữ liệu nào không
+            if (totalCount === 0) {
                 showToast('Không có dữ liệu để xuất.', 'error');
+                return;
+            }
+
+            // Hiển thị thông báo phân loại
+            let statsMsg = `📊 Phân loại: `;
+            for (const [carrier, data] of Object.entries(carriers)) {
+                const displayName = carrier === 'Khac' ? 'Khác' : carrier;
+                statsMsg += `${displayName}: ${data.length}, `;
+            }
+            statsMsg += `Tổng: ${totalCount}`;
+            showToast(statsMsg, 'info', 5000);
+
+            try {
+                const zip = new JSZip();
+                let fileCount = 0;
+
+                for (const [carrier, data] of Object.entries(carriers)) {
+                    if (data.length === 0) continue;
+                    
+                    // Tạo dữ liệu Excel với 2 cột
+                    const excelData = data.map(item => ({
+                        'Số điện thoại': item.phone,
+                        'Link rút gọn': item.link
+                    }));
+
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.json_to_sheet(excelData);
+                    ws['!cols'] = [
+                        { wch: 20 },
+                        { wch: 45 }
+                    ];
+                    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+                    const wbout = XLSX.write(wb, { 
+                        bookType: 'xlsx', 
+                        type: 'array',
+                        bookSST: false
+                    });
+
+                    // Đặt tên file theo nhà mạng (Viettel.xlsx, Khac.xlsx, ...)
+                    const fileName = `${carrier}.xlsx`;
+                    zip.file(fileName, wbout);
+                    fileCount++;
+                    
+                    console.log(`📄 Đã thêm file: ${fileName} (${data.length} số)`);
+                }
+
+                // Tạo file ZIP và tải xuống
+                zip.generateAsync({ 
+                    type: 'blob',
+                    compression: 'DEFLATE',
+                    compressionOptions: { level: 6 }
+                })
+                .then(function(content) {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(content);
+                    link.download = `SMS_By_Carrier_${new Date().getTime()}.zip`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    setTimeout(function() {
+                        URL.revokeObjectURL(link.href);
+                    }, 100);
+                    
+                    showToast(`✅ Đã xuất ZIP với ${fileCount} file Excel theo nhà mạng!`, 'success');
+                })
+                .catch(function(err) {
+                    console.error('Lỗi tạo ZIP:', err);
+                    showToast('Lỗi tạo ZIP: ' + err.message, 'error');
+                });
+
+            } catch (err) {
+                console.error('Lỗi xuất ZIP:', err);
+                showToast('Lỗi xuất ZIP: ' + err.message, 'error');
+            }
+        }
+
+        // ---------- EXPORT EXCEL GỐC ----------
+        function exportOriginalExcel() {
+            if (!tableData.length) {
+                showToast('Không có dữ liệu.', 'error');
                 return;
             }
 
@@ -829,7 +1016,7 @@
 
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = originalFileName || 'SMS_SLSS_07092026_updated.xlsx';
+                link.download = originalFileName || 'SMS_updated.xlsx';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -846,13 +1033,14 @@
         function resetData() {
             if (isProcessing) return;
             tableData = [];
+            originalFileName = '';
             renderTable();
             progressFill.style.width = '0%';
             showToast('Đã đặt lại dữ liệu.', 'info');
         }
 
-        // ---------- FILE INPUT TRIGGER ----------
-        function triggerFileInput() {
+        // ---------- EVENT BINDING ----------
+        dropZone.addEventListener('click', function() {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.xlsx,.xls';
@@ -864,19 +1052,21 @@
                 input.remove();
             };
             input.click();
-        }
+        });
 
-        // ---------- EVENT BINDING ----------
-        btnLoad.addEventListener('click', triggerFileInput);
-        btnShortenAll.addEventListener('click', shortenAll);
-        btnFixPhone.addEventListener('click', fixAllPhones);
-        btnExportExcel.addEventListener('click', exportExcel);
-        btnReset.addEventListener('click', resetData);
-
-        // Drag and drop
-        document.addEventListener('dragover', function(e) { e.preventDefault(); });
-        document.addEventListener('drop', function(e) {
+        dropZone.addEventListener('dragover', function(e) {
             e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
             const files = e.dataTransfer.files;
             if (files.length && (files[0].name.endsWith('.xlsx') || files[0].name.endsWith('.xls'))) {
                 loadExcelFile(files[0]);
@@ -885,15 +1075,24 @@
             }
         });
 
-        // khởi tạo
+        btnShortenAll.addEventListener('click', shortenAll);
+        btnFixPhone.addEventListener('click', fixAllPhones);
+        btnExportZip.addEventListener('click', exportZipByCarrier);
+        btnExportExcel.addEventListener('click', exportOriginalExcel);
+        btnReset.addEventListener('click', resetData);
+
+        // Khởi tạo
         renderTable();
 
         console.log('📎 Ứng dụng rút gọn link từ Excel đã sẵn sàng.');
+        console.log('📱 Hàm getNetwork sử dụng logic từ app.py để xác định nhà mạng');
+        console.log('📦 Xuất ZIP bao gồm cả nhà mạng Khác (Khac.xlsx)');
         console.log('💡 Hướng dẫn:');
-        console.log('  1. Tải file Excel');
-        console.log('  2. Nhấn "Chuẩn hóa SĐT" để kiểm tra và sửa số điện thoại');
-        console.log('  3. Nhấn "Rút gọn tất cả" để tạo link TinyURL');
-        console.log('  4. Nhấn "Xuất Excel" để tải về file đã cập nhật');
+        console.log('  1. Click hoặc kéo thả file Excel vào vùng bên trên');
+        console.log('  2. Hệ thống tự động xác định nhà mạng từ số điện thoại');
+        console.log('  3. Nhấn "📱 Chuẩn hóa SĐT" để chuyển đổi số 0→84');
+        console.log('  4. Nhấn "⚡ Rút gọn tất cả" để tạo link TinyURL');
+        console.log('  5. Nhấn "📦 Xuất ZIP theo nhà mạng" để tải file ZIP');
     })();
 </script>
 
