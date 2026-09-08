@@ -389,18 +389,20 @@
         .status-error { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
         .status-processing { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
         
+        /* Carrier badges - Màu sắc theo yêu cầu */
         .carrier-badge {
             display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 0.65rem;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: 600;
+            color: #fff;
         }
-        .carrier-viettel { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-        .carrier-vinaphone { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
-        .carrier-mobifone { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-        .carrier-vietnamobile { background: rgba(236, 72, 153, 0.1); color: #ec4899; }
-        .carrier-khac { background: rgba(148, 163, 184, 0.15); color: #64748b; }
+        .carrier-viettel { background: #dc2626; }      /* Đỏ */
+        .carrier-vinaphone { background: #1a56db; }    /* Xanh biển đậm */
+        .carrier-mobifone { background: #3b82f6; }     /* Xanh biển nhạt */
+        .carrier-vietnamobile { background: #d97706; } /* Vàng */
+        .carrier-khac { background: #1a2332; }         /* Đen */
         
         .short-link {
             color: #0d9488;
@@ -596,12 +598,13 @@
                         <th style="width:40px;">#</th>
                         <th>SĐT</th>
                         <th>Họ tên</th>
+                        <th>Nhà mạng</th>
                         <th>VACXIN</th>
                         <th>NGÀY TÁI KHÁM</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody2">
-                    <tr><td colspan="5" class="empty-state">
+                    <tr><td colspan="6" class="empty-state">
                         <span class="icon">📋</span>
                         Chưa có dữ liệu
                     </td></tr>
@@ -684,7 +687,6 @@
         let phoneStr = String(phoneVal).split('.')[0].trim();
         let phoneDigits = phoneStr.replace(/\D/g, '');
         
-        // Nếu bắt đầu bằng 0, chuyển thành 84
         if (phoneDigits.startsWith('0')) {
             phoneDigits = '84' + phoneDigits.substring(1);
         } else if (phoneDigits.length === 9) {
@@ -693,7 +695,6 @@
             phoneDigits = '84' + phoneDigits;
         }
         
-        // Kiểm tra độ dài
         const len = phoneDigits.length;
         let isValid = false;
         let isError = false;
@@ -701,7 +702,6 @@
         if (len === 11) {
             isValid = true;
         } else if (len === 12) {
-            // 12 số -> lỗi
             isValid = false;
             isError = true;
         } else {
@@ -713,12 +713,10 @@
     }
 
     // ---------- GET NETWORK ----------
-    // Nếu số có 12 số -> trả về 'Khac' để xuất vào file Khac.xlsx
     function getNetwork(phone) {
         if (!phone || phone.length < 5) return 'Khac';
         let p = String(phone).replace(/[^0-9]/g, '');
         
-        // Nếu số có 12 số -> luôn là Khac
         if (p.length === 12) {
             return 'Khac';
         }
@@ -900,7 +898,7 @@
                         } else if (result.isError) {
                             phoneStatus = 'error';
                             soDT = formattedPhone || soDT;
-                            carrier = 'Khac'; // Luôn là Khac nếu số có 12 số
+                            carrier = 'Khac';
                             errorCount++;
                         } else {
                             phoneStatus = 'invalid';
@@ -1019,7 +1017,7 @@
                     } else if (result.isError) {
                         row.phoneStatus = 'error';
                         row.phoneError = true;
-                        row.NhaMang = 'Khac'; // Luôn là Khac nếu số có 12 số
+                        row.NhaMang = 'Khac';
                         errorCount++;
                     } else {
                         row.phoneStatus = 'invalid';
@@ -1039,9 +1037,7 @@
 
     // ---------- EXPORT ZIP LINK ----------
     function exportZipLink() {
-        // Lọc dữ liệu: chỉ lấy số hợp lệ (11 số) và có link rút gọn
         const validData = state.link.data.filter(r => r.phoneStatus === 'valid' && r.linkRutGon && r.SoDT);
-        // Lọc số lỗi (12 số) có link rút gọn để xuất vào Khac.xlsx
         const errorData = state.link.data.filter(r => r.phoneError && r.linkRutGon && r.SoDT);
         
         if (!validData.length && !errorData.length) {
@@ -1051,14 +1047,12 @@
 
         const groups = {};
         
-        // Xử lý số hợp lệ
         for (let row of validData) {
             const carrier = row.NhaMang || 'Khac';
             if (!groups[carrier]) groups[carrier] = [];
             groups[carrier].push({ 'Số điện thoại': row.SoDT, 'Link rút gọn': row.linkRutGon });
         }
         
-        // Xử lý số lỗi (12 số) - luôn vào Khac
         if (errorData.length > 0) {
             if (!groups['Khac']) groups['Khac'] = [];
             for (let row of errorData) {
@@ -1114,7 +1108,7 @@
         const tbody = document.getElementById('tableBody2');
         
         if (!data.length) {
-            tbody.innerHTML = `<tr><td colspan="5" class="empty-state">
+            tbody.innerHTML = `<tr><td colspan="6" class="empty-state">
                 <span class="icon">📋</span>
                 Chưa có dữ liệu
             </td></tr>`;
@@ -1137,10 +1131,20 @@
                 phoneDisplay = `<span style="color:#94a3b8;">—</span>`;
             }
             
+            let carrierDisplay = '';
+            if (row.NhaMang) {
+                const cls = getCarrierClass(row.NhaMang);
+                const display = getCarrierDisplay(row.NhaMang);
+                carrierDisplay = `<span class="carrier-badge ${cls}">${escapeHtml(display)}</span>`;
+            } else {
+                carrierDisplay = `<span style="color:#94a3b8;">—</span>`;
+            }
+            
             html += `<tr>
                 <td><span class="row-number">${rowNum}</span></td>
                 <td>${phoneDisplay}</td>
                 <td><strong>${escapeHtml(row.ho_ten || '')}</strong></td>
+                <td>${carrierDisplay}</td>
                 <td>${escapeHtml(row.VACXIN || '')}</td>
                 <td>${escapeHtml(row.NGAYTAIKHAM || '')}</td>
             </tr>`;
@@ -1205,6 +1209,8 @@
                     
                     let phoneStatus = result.isValid ? 'valid' : 'error';
                     let phoneError = result.isError;
+                    let carrier = getNetwork(result.phone);
+                    
                     if (result.isError) errorCount++;
                     
                     processed.push({
@@ -1213,7 +1219,8 @@
                         VACXIN: processVaccineName(String(values[colIndex.vacXin] || '').trim()),
                         NGAYTAIKHAM: String(values[colIndex.ngayHen] || '').trim(),
                         phoneStatus: phoneStatus,
-                        phoneError: phoneError
+                        phoneError: phoneError,
+                        NhaMang: carrier
                     });
                 }
                 
@@ -1250,10 +1257,12 @@
                     if (result.isValid) {
                         row.phoneStatus = 'valid';
                         row.phoneError = false;
+                        row.NhaMang = getNetwork(result.phone);
                         fixed++;
                     } else if (result.isError) {
                         row.phoneStatus = 'error';
                         row.phoneError = true;
+                        row.NhaMang = 'Khac';
                         errorCount++;
                     }
                 }
@@ -1269,9 +1278,7 @@
 
     // ---------- EXPORT ZIP VACCINE ----------
     function exportZipVaccine() {
-        // Lọc số hợp lệ (11 số)
         const validData = state.vaccine.data.filter(r => r.phoneStatus === 'valid' && r.SoDT);
-        // Lọc số lỗi (12 số)
         const errorData = state.vaccine.data.filter(r => r.phoneError && r.SoDT);
         
         if (!validData.length && !errorData.length) {
@@ -1284,7 +1291,6 @@
         
         const groups = {};
         
-        // Xử lý số hợp lệ
         for (let row of validData) {
             const network = getNetwork(row.SoDT);
             if (!groups[network]) groups[network] = [];
@@ -1296,7 +1302,6 @@
             });
         }
         
-        // Xử lý số lỗi (12 số) - luôn vào Khac
         if (errorData.length > 0) {
             if (!groups['Khac']) groups['Khac'] = [];
             for (let row of errorData) {
@@ -1417,6 +1422,7 @@
         console.log('🏥 Hệ thống SMS Bệnh viện đã sẵn sàng!');
         console.log('🔗 Tab 1: Rút gọn link Google Drive');
         console.log('💉 Tab 2: Xử lý danh sách tiêm chủng');
+        console.log('📌 Màu sắc nhà mạng: VinaPhone - Xanh biển đậm | Viettel - Đỏ | Vietnamobile - Vàng | MobiFone - Xanh biển nhạt | Khác - Đen');
         console.log('⚠️ Số điện thoại có độ dài > 11 sẽ được bôi đỏ, hiển thị dấu ! và xuất vào Khac.xlsx');
     }
 
