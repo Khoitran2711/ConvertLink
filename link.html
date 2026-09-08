@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rút gọn link Google Drive từ Excel</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .sub {
+            color: #64748b;
+            margin-bottom: 25px;
+            font-size: 15px;
+            border-left: 4px solid #3b82f6;
+            padding-left: 14px;
+            background: #f8fafc;
+            border-radius: 0 8px 8px 0;
+            line-height: 1.5;
+        }
+        
+        /* Stats header - đưa lên đầu trang */
+        .stats-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .stats-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1e293b;
+            padding: 6px 14px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .stats-item .icon {
+            font-size: 18px;
+        }
+        .stats-item .count {
+            font-weight: 700;
+            font-size: 17px;
+        }
+        .stats-item .label {
+            color: #64748b;
+            font-weight: 400;
+        }
+        .stats-item.success .count {
+            color: #059669;
+        }
+        .stats-item.warning .count {
+            color: #dc2626;
+        }
+        .stats-item.info .count {
+            color: #2563eb;
+        }
+        .stats-divider {
+            width: 1px;
+            height: 30px;
+            background: #e2e8f0;
+        }
+        
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 25px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .left-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .btn {
+            background: #eef2f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 14px;
+            color: #1e293b;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .btn-primary {
+            background: #1e293b;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0f172a;
+        }
+        .btn-success {
+            background: #059669;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #047857;
+        }
+        .btn-warning {
+            background: #d97706;
+            color: white;
+        }
+        .btn-warning:hover {
+            background: #b45309;
+        }
+        .btn-info {
+            background: #2563eb;
+            color: white;
+        }
+        .btn-info:hover {
+            background: #1d4ed8;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .stats {
+            font-size: 14px;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 5px 16px;
+            border-radius: 30px;
+            white-space: nowrap;
+        }
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            background: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 500px;
+        }
+        th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 14px 16px;
+            font-weight: 600;
+            color: #1e293b;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            word-break: break-word;
+        }
+        tr:hover td {
+            background: #fafcff;
+        }
+        .col-rutgon {
+            min-width: 200px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-ready {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .status-done {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .status-processing {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+        .short-link {
+            color: #059669;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .short-link:hover {
+            text-decoration: underline;
+        }
+        .footer-actions {
+            margin-top: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .note {
+            font-size: 13px;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 8px 18px;
+            border-radius: 40px;
+        }
+        .progress-bar {
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin: 20px 0 10px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e293b;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 60px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            font-size: 14px;
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 999;
+            max-width: 90%;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast.success {
+            background: #059669;
+        }
+        .toast.error {
+            background: #b91c1c;
+        }
+        .phone-valid {
+            color: #059669;
+            font-weight: 500;
+        }
+        .phone-invalid {
+            color: #dc2626;
+            font-weight: 600;
+        }
+        .phone-warning {
+            color: #dc2626;
+            font-weight: 700;
+            background: #fee2e2;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .phone-fixed {
+            color: #2563eb;
+            font-weight: 500;
+        }
+        .warning-icon {
+            color: #dc2626;
+            font-weight: 700;
+            font-size: 16px;
+            margin-left: 4px;
+        }
+        @media (max-width: 700px) {
+            .container { padding: 16px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .left-group { flex-wrap: wrap; }
+            .stats { white-space: normal; }
+            td, th { padding: 10px 12px; font-size: 13px; }
+            .stats-header { flex-direction: column; align-items: stretch; gap: 10px; }
+            .stats-item { justify-content: center; }
+            .stats-divider { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📎 Rút gọn link Google Drive</h1>
+    <div class="sub">
+        🔹 Dữ liệu từ file <strong>SMS SLSS 07092026.xlsx</strong><br>
+        🔹 Tự động kiểm tra và chuẩn hóa số điện thoại (10 số → 84, cảnh báo số 12 số)
+    </div>
+
+    <!-- Stats Header - Đưa lên đầu trang -->
+    <div class="stats-header" id="statsHeader">
+        <div class="stats-item success">
+            <span class="icon">✅</span>
+            <span class="label">Đã rút gọn:</span>
+            <span class="count" id="headerShortCount">0</span>
+        </div>
+        <div class="stats-divider"></div>
+        <div class="stats-item info">
+            <span class="icon">📱</span>
+            <span class="label">SĐT hợp lệ:</span>
+            <span class="count" id="headerPhoneCount">0</span>
+        </div>
+        <div class="stats-divider"></div>
+        <div class="stats-item warning">
+            <span class="icon">⚠️</span>
+            <span class="label">SĐT cảnh báo:</span>
+            <span class="count" id="headerWarningCount">0</span>
+        </div>
+        <div class="stats-divider"></div>
+        <div class="stats-item" style="background:transparent; box-shadow:none; padding-left:0;">
+            <span style="color:#94a3b8; font-size:14px; font-weight:400;">| Tổng số dòng: <strong id="headerTotalCount" style="color:#1e293b;">0</strong></span>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <div class="left-group">
+            <button class="btn btn-primary" id="btnLoadExcel">📂 Tải file Excel</button>
+            <button class="btn btn-success" id="btnShortenAll" disabled>⚡ Rút gọn tất cả</button>
+            <button class="btn btn-info" id="btnFixPhone">📱 Chuẩn hóa SĐT</button>
+            <button class="btn btn-warning" id="btnExportExcel">📥 Xuất Excel</button>
+        </div>
+        <div>
+            <button class="btn btn-outline" id="btnReset">🔄 Đặt lại</button>
+        </div>
+    </div>
+
+    <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="table-wrap" id="tableWrap">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:30%">Họ tên</th>
+                    <th style="width:25%">SĐT</th>
+                    <th style="width:45%">Link rút gọn (cột C)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr><td colspan="3" style="text-align:center; color:#94a3b8; padding:40px 0;">
+                    ⬆️ Nhấn "Tải file Excel" để bắt đầu
+                </td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer-actions">
+        <div class="note">📌 TinyURL sẽ được tạo tự động cho từng link chưa rút gọn.</div>
+        <div style="display:flex; gap:15px; flex-wrap:wrap;">
+            <span id="counterShort" style="font-size:14px; color:#475569;">Đã rút gọn: 0</span>
+            <span id="counterPhone" style="font-size:14px; color:#475569;">SĐT hợp lệ: 0</span>
+            <span id="counterWarning" style="font-size:14px; color:#dc2626;">⚠️ SĐT cảnh báo: 0</span>
+        </div>
+    </div>
+</div>
+
+<!-- Toast thông báo -->
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+    (function() {
+        // ---------- STATE ----------
+        let tableData = [];
+        let isProcessing = false;
+        let originalFileName = 'SMS SLSS 07092026.xlsx';
+
+        // DOM refs
+        const tbody = document.getElementById('tableBody');
+        const btnLoad = document.getElementById('btnLoadExcel');
+        const btnShortenAll = document.getElementById('btnShortenAll');
+        const btnFixPhone = document.getElementById('btnFixPhone');
+        const btnExportExcel = document.getElementById('btnExportExcel');
+        const btnReset = document.getElementById('btnReset');
+        const progressFill = document.getElementById('progressFill');
+        const toast = document.getElementById('toast');
+        
+        // Header stats
+        const headerShortCount = document.getElementById('headerShortCount');
+        const headerPhoneCount = document.getElementById('headerPhoneCount');
+        const headerWarningCount = document.getElementById('headerWarningCount');
+        const headerTotalCount = document.getElementById('headerTotalCount');
+        
+        // Footer stats (giữ lại để tham khảo)
+        const counterShort = document.getElementById('counterShort');
+        const counterPhone = document.getElementById('counterPhone');
+        const counterWarning = document.getElementById('counterWarning');
+
+        // ---------- HELPER: Toast ----------
+        let toastTimer = null;
+        function showToast(message, type = 'info', duration = 3000) {
+            toast.textContent = message;
+            toast.className = 'toast';
+            if (type === 'success') toast.classList.add('success');
+            else if (type === 'error') toast.classList.add('error');
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // ---------- PHONE VALIDATION & FIX ----------
+        function validateAndFixPhone(phone) {
+            if (!phone) return { valid: false, fixed: '', message: 'Trống', status: 'empty' };
+            
+            // Xóa tất cả ký tự không phải số
+            let clean = String(phone).replace(/[^0-9]/g, '');
+            
+            // Nếu rỗng sau khi lọc
+            if (!clean) return { valid: false, fixed: '', message: 'Không có số', status: 'empty' };
+            
+            // Xử lý số bắt đầu bằng 84 (đã có mã quốc gia)
+            if (clean.startsWith('84')) {
+                if (clean.length === 11) {
+                    return { valid: true, fixed: clean, message: 'Hợp lệ (84)', status: 'valid' };
+                }
+                if (clean.length === 12) {
+                    // 84 + 10 số = 12 số -> cảnh báo (có thể thừa 1 số)
+                    return { valid: false, fixed: clean, message: '⚠️ 12 số (có 84)', status: 'warning_12' };
+                }
+                if (clean.length === 10 && clean.startsWith('84')) {
+                    return { valid: false, fixed: clean, message: '⚠️ Thiếu số (84)', status: 'warning' };
+                }
+                return { valid: false, fixed: clean, message: '⚠️ Không hợp lệ (84)', status: 'invalid' };
+            }
+            
+            // Xử lý số bắt đầu bằng 0 (10 số)
+            if (clean.startsWith('0')) {
+                if (clean.length === 10) {
+                    let fixed = '84' + clean.substring(1);
+                    return { valid: true, fixed: fixed, message: 'Đã chuyển (0→84)', status: 'valid' };
+                } else if (clean.length === 11) {
+                    // Số 11 số bắt đầu bằng 0 (đầu số mới) -> cảnh báo
+                    return { valid: false, fixed: clean, message: '⚠️ 11 số (có 0)', status: 'warning_11' };
+                } else {
+                    return { valid: false, fixed: clean, message: '⚠️ Không hợp lệ (0)', status: 'invalid' };
+                }
+            }
+            
+            // Xử lý số không bắt đầu bằng 0 hoặc 84
+            if (clean.length === 9) {
+                let fixed = '84' + clean;
+                return { valid: true, fixed: fixed, message: 'Đã thêm 84', status: 'valid' };
+            } else if (clean.length === 10) {
+                let fixed = '84' + clean;
+                // Nếu sau khi thêm 84 mà thành 12 số (84 + 10 số) -> cảnh báo
+                if (fixed.length === 12) {
+                    return { valid: false, fixed: fixed, message: '⚠️ 12 số (thêm 84)', status: 'warning_12' };
+                }
+                return { valid: true, fixed: fixed, message: 'Đã thêm 84', status: 'valid' };
+            } else if (clean.length === 11) {
+                // Số 11 số không có 0 và 84 -> thêm 84 thành 13 số -> cảnh báo
+                let fixed = '84' + clean;
+                return { valid: false, fixed: fixed, message: '⚠️ 13 số (thêm 84)', status: 'warning' };
+            } else {
+                return { valid: false, fixed: clean, message: '⚠️ Không hợp lệ', status: 'invalid' };
+            }
+        }
+
+        // ---------- FIX ALL PHONE NUMBERS ----------
+        function fixAllPhones() {
+            if (!tableData.length) {
+                showToast('Không có dữ liệu.', 'error');
+                return;
+            }
+
+            let fixedCount = 0;
+            let invalidCount = 0;
+            let warningCount = 0;
+            let validCount = 0;
+
+            for (let row of tableData) {
+                if (!row.SoDT) continue;
+                
+                const result = validateAndFixPhone(row.SoDT);
+                
+                if (result.valid) {
+                    row.SoDT = result.fixed;
+                    row.phoneStatus = 'valid';
+                    fixedCount++;
+                    validCount++;
+                } else {
+                    if (result.status === 'warning_12' || result.status === 'warning_11' || result.status === 'warning') {
+                        row.phoneStatus = 'warning';
+                        warningCount++;
+                    } else {
+                        row.phoneStatus = 'invalid';
+                        invalidCount++;
+                    }
+                    row.SoDT = result.fixed;
+                }
+            }
+
+            renderTable();
+            showToast(`Đã xử lý: ${validCount} số hợp lệ, ${warningCount} số cảnh báo (12 số), ${invalidCount} số không hợp lệ.`, 'success');
+            updateStats();
+        }
+
+        // ---------- UPDATE STATS ----------
+        function updateStats() {
+            const total = tableData.length;
+            const shortened = tableData.filter(r => r.status === 'done').length;
+            const validPhones = tableData.filter(r => r.phoneStatus === 'valid').length;
+            const warningPhones = tableData.filter(r => r.phoneStatus === 'warning').length;
+            
+            // Update header stats
+            headerShortCount.textContent = shortened;
+            headerPhoneCount.textContent = validPhones;
+            headerWarningCount.textContent = warningPhones;
+            headerTotalCount.textContent = total;
+            
+            // Update footer stats
+            counterShort.textContent = `Đã rút gọn: ${shortened}`;
+            counterPhone.textContent = `SĐT hợp lệ: ${validPhones}`;
+            counterWarning.textContent = `⚠️ SĐT cảnh báo: ${warningPhones}`;
+        }
+
+        // ---------- RENDER TABLE ----------
+        function renderTable() {
+            if (!tableData.length) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#94a3b8; padding:40px 0;">
+                    ⬆️ Nhấn "Tải file Excel" để bắt đầu
+                </td></tr>`;
+                btnShortenAll.disabled = true;
+                updateStats();
+                return;
+            }
+
+            let html = '';
+            for (let i = 0; i < tableData.length; i++) {
+                const row = tableData[i];
+                const status = row.status || 'ready';
+
+                let statusBadge = '';
+                if (status === 'ready') statusBadge = `<span class="status-badge status-ready">Sẵn sàng</span>`;
+                else if (status === 'processing') statusBadge = `<span class="status-badge status-processing">⏳ Đang rút...</span>`;
+                else if (status === 'done') statusBadge = `<span class="status-badge status-done">✓ Đã rút gọn</span>`;
+                else if (status === 'error') statusBadge = `<span class="status-badge status-error">⚠️ Lỗi</span>`;
+                else statusBadge = `<span class="status-badge status-ready">Sẵn sàng</span>`;
+
+                // Hiển thị số điện thoại với trạng thái
+                let phoneDisplay = '';
+                if (row.SoDT) {
+                    if (row.phoneStatus === 'valid') {
+                        phoneDisplay = `<span class="phone-valid">${escapeHtml(row.SoDT)}</span>`;
+                    } else if (row.phoneStatus === 'warning') {
+                        const is12Digit = row.SoDT.length === 12 && row.SoDT.startsWith('84');
+                        const is11Digit = row.SoDT.length === 11 && row.SoDT.startsWith('0');
+                        let warningMsg = '⚠️ Cảnh báo';
+                        if (is12Digit) {
+                            warningMsg = '⚠️ 12 số !';
+                        } else if (is11Digit) {
+                            warningMsg = '⚠️ 11 số !';
+                        }
+                        phoneDisplay = `<span class="phone-warning">${escapeHtml(row.SoDT)} <span class="warning-icon">${warningMsg}</span></span>`;
+                    } else {
+                        phoneDisplay = `<span class="phone-invalid">${escapeHtml(row.SoDT)} <span class="warning-icon">⚠️</span></span>`;
+                    }
+                } else {
+                    phoneDisplay = `<span style="color:#94a3b8;">—</span>`;
+                }
+
+                const linkRutGonDisplay = row.linkRutGon 
+                    ? `<a href="${row.linkRutGon}" target="_blank" class="short-link">${row.linkRutGon}</a>` 
+                    : `<span style="color:#94a3b8;">—</span>`;
+
+                html += `<tr>
+                    <td><strong>${escapeHtml(row.HoTen || '')}</strong></td>
+                    <td>${phoneDisplay}</td>
+                    <td class="col-rutgon">${linkRutGonDisplay} ${statusBadge}</td>
+                </tr>`;
+            }
+            tbody.innerHTML = html;
+            btnShortenAll.disabled = (tableData.length === 0 || isProcessing);
+            
+            // update progress
+            const total = tableData.length;
+            const done = tableData.filter(r => r.status === 'done' || r.status === 'error').length;
+            const pct = total ? Math.round((done / total) * 100) : 0;
+            progressFill.style.width = pct + '%';
+            
+            updateStats();
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/[&<>"]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                if (m === '"') return '&quot;';
+                return m;
+            });
+        }
+
+        // ---------- LOAD EXCEL ----------
+        function loadExcelFile(file) {
+            originalFileName = file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(firstSheet, { defval: '' });
+
+                    if (!json || !json.length) {
+                        showToast('File Excel trống hoặc không đúng định dạng.', 'error');
+                        return;
+                    }
+
+                    const headers = Object.keys(json[0]);
+                    const colHoTen = headers.find(h => h.trim() === 'HoTen') || headers[0];
+                    const colSoDT = headers.find(h => h.trim() === 'SoDT') || headers[1];
+                    const colRutGon = headers.find(h => h.trim() === 'linh rut gon') || headers[2];
+                    const colLinkGoc = headers.find(h => h.trim() === 'Link goc') || headers[3];
+
+                    const newData = [];
+                    for (let row of json) {
+                        let linkGoc = String(row[colLinkGoc] || '').trim();
+                        if (linkGoc && !linkGoc.startsWith('http')) {
+                            linkGoc = 'https://' + linkGoc;
+                        }
+                        let linkRutGon = String(row[colRutGon] || '').trim();
+                        if (linkRutGon && !linkRutGon.startsWith('http')) {
+                            linkRutGon = '';
+                        }
+                        
+                        let soDT = String(row[colSoDT] || '').trim();
+                        let phoneStatus = 'unknown';
+                        if (soDT) {
+                            const result = validateAndFixPhone(soDT);
+                            if (result.valid) {
+                                phoneStatus = 'valid';
+                                soDT = result.fixed;
+                            } else if (result.status === 'warning_12' || result.status === 'warning_11' || result.status === 'warning') {
+                                phoneStatus = 'warning';
+                                soDT = result.fixed;
+                            } else {
+                                phoneStatus = 'invalid';
+                                soDT = result.fixed || soDT;
+                            }
+                        }
+                        
+                        const status = linkRutGon ? 'done' : 'ready';
+                        newData.push({
+                            HoTen: String(row[colHoTen] || '').trim(),
+                            SoDT: soDT,
+                            linkGoc: linkGoc,
+                            linkRutGon: linkRutGon,
+                            status: status,
+                            phoneStatus: phoneStatus
+                        });
+                    }
+
+                    const filtered = newData.filter(r => r.HoTen || r.SoDT || r.linkGoc);
+                    if (!filtered.length) {
+                        showToast('Không tìm thấy dữ liệu hợp lệ.', 'error');
+                        return;
+                    }
+
+                    tableData = filtered;
+                    renderTable();
+                    showToast(`Đã tải ${tableData.length} dòng từ Excel.`, 'success');
+                } catch (err) {
+                    console.error(err);
+                    showToast('Lỗi đọc file Excel: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // ---------- SHORTEN ONE (TinyURL) ----------
+        async function shortenLink(link) {
+            if (!link) return { success: false, error: 'Link trống' };
+            try {
+                const resp = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(link)}`);
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const short = await resp.text();
+                if (short && short.startsWith('http')) {
+                    return { success: true, shortUrl: short.trim() };
+                } else {
+                    throw new Error('Phản hồi không hợp lệ');
+                }
+            } catch (err) {
+                console.warn('TinyURL error:', err);
+                return { success: false, error: err.message || 'Lỗi rút gọn' };
+            }
+        }
+
+        // ---------- SHORTEN ALL ----------
+        async function shortenAll() {
+            if (isProcessing) return;
+            if (!tableData.length) {
+                showToast('Không có dữ liệu.', 'error');
+                return;
+            }
+
+            const toShorten = tableData.filter(r => r.status !== 'done' && r.linkGoc);
+            if (!toShorten.length) {
+                showToast('Tất cả link đã được rút gọn.', 'info');
+                return;
+            }
+
+            isProcessing = true;
+            btnShortenAll.disabled = true;
+            showToast(`Đang rút gọn ${toShorten.length} link...`, 'info', 2000);
+
+            let successCount = 0;
+            let failCount = 0;
+
+            for (let i = 0; i < toShorten.length; i++) {
+                const row = toShorten[i];
+                const originalIndex = tableData.indexOf(row);
+                if (originalIndex === -1) continue;
+
+                tableData[originalIndex].status = 'processing';
+                renderTable();
+
+                const result = await shortenLink(row.linkGoc);
+                if (result.success) {
+                    tableData[originalIndex].linkRutGon = result.shortUrl;
+                    tableData[originalIndex].status = 'done';
+                    successCount++;
+                } else {
+                    tableData[originalIndex].status = 'error';
+                    failCount++;
+                    console.warn(`Lỗi rút gọn cho ${row.HoTen}: ${result.error}`);
+                }
+                renderTable();
+                await new Promise(r => setTimeout(r, 300));
+            }
+
+            isProcessing = false;
+            btnShortenAll.disabled = false;
+            renderTable();
+            showToast(`Hoàn thành: ${successCount} link rút gọn, ${failCount} lỗi.`, successCount > 0 ? 'success' : 'error');
+        }
+
+        // ---------- EXPORT EXCEL ----------
+        function exportExcel() {
+            if (!tableData.length) {
+                showToast('Không có dữ liệu để xuất.', 'error');
+                return;
+            }
+
+            try {
+                const excelData = tableData.map(r => ({
+                    'HoTen': r.HoTen || '',
+                    'SoDT': r.SoDT || '',
+                    'linh rut gon': r.linkRutGon || '',
+                    'Link goc': r.linkGoc || ''
+                }));
+
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.json_to_sheet(excelData);
+                ws['!cols'] = [
+                    { wch: 25 },
+                    { wch: 15 },
+                    { wch: 35 },
+                    { wch: 50 }
+                ];
+
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+                const wbout = XLSX.write(wb, { 
+                    bookType: 'xlsx', 
+                    type: 'array',
+                    bookSST: false
+                });
+
+                const blob = new Blob([wbout], { 
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
+
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = originalFileName || 'SMS_SLSS_07092026_updated.xlsx';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(link.href);
+
+                showToast('Đã xuất file Excel thành công!', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('Lỗi xuất Excel: ' + err.message, 'error');
+            }
+        }
+
+        // ---------- RESET ----------
+        function resetData() {
+            if (isProcessing) return;
+            tableData = [];
+            renderTable();
+            progressFill.style.width = '0%';
+            showToast('Đã đặt lại dữ liệu.', 'info');
+        }
+
+        // ---------- FILE INPUT TRIGGER ----------
+        function triggerFileInput() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.xlsx,.xls';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    loadExcelFile(file);
+                }
+                input.remove();
+            };
+            input.click();
+        }
+
+        // ---------- EVENT BINDING ----------
+        btnLoad.addEventListener('click', triggerFileInput);
+        btnShortenAll.addEventListener('click', shortenAll);
+        btnFixPhone.addEventListener('click', fixAllPhones);
+        btnExportExcel.addEventListener('click', exportExcel);
+        btnReset.addEventListener('click', resetData);
+
+        // Drag and drop
+        document.addEventListener('dragover', function(e) { e.preventDefault(); });
+        document.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            if (files.length && (files[0].name.endsWith('.xlsx') || files[0].name.endsWith('.xls'))) {
+                loadExcelFile(files[0]);
+            } else {
+                showToast('Vui lòng thả file Excel (.xlsx, .xls)', 'error');
+            }
+        });
+
+        // khởi tạo
+        renderTable();
+
+        console.log('📎 Ứng dụng rút gọn link từ Excel đã sẵn sàng.');
+        console.log('💡 Hướng dẫn:');
+        console.log('  1. Tải file Excel');
+        console.log('  2. Nhấn "Chuẩn hóa SĐT" để kiểm tra và sửa số điện thoại');
+        console.log('  3. Nhấn "Rút gọn tất cả" để tạo link TinyURL');
+        console.log('  4. Nhấn "Xuất Excel" để tải về file đã cập nhật');
+    })();
+</script>
+
+</body>
+</html>
