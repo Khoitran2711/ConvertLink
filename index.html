@@ -4,622 +4,1506 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hệ thống SMS Bệnh viện Đa khoa Ninh Thuận</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #f5f7fb;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #eef2f9;
+            --bg-glass: rgba(255, 255, 255, 0.7);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-color: rgba(15, 23, 42, 0.06);
+            --border-strong: rgba(15, 23, 42, 0.1);
+            
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #14b8a6;
+            --primary-bg: rgba(13, 148, 136, 0.08);
+            
+            --blue: #3b82f6;
+            --blue-dark: #2563eb;
+            --blue-bg: rgba(59, 130, 246, 0.08);
+            
+            --purple: #7c3aed;
+            --purple-dark: #6d28d9;
+            --purple-bg: rgba(124, 58, 237, 0.08);
+            
+            --red: #ef4444;
+            --red-dark: #dc2626;
+            --red-bg: rgba(239, 68, 68, 0.08);
+            
+            --amber: #f59e0b;
+            --amber-bg: rgba(245, 158, 11, 0.08);
+            
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+            --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.08);
+            --shadow-xl: 0 20px 48px rgba(15, 23, 42, 0.12);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0f1e;
+            --bg-secondary: #111827;
+            --bg-tertiary: #1e293b;
+            --bg-glass: rgba(17, 24, 39, 0.7);
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --border-strong: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.6);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f0f4ff 0%, #e8edf5 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
             min-height: 100vh;
-            padding: 20px;
-            color: #1a2332;
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
         }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(13, 148, 136, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
         }
-        
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 20px 0 15px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid rgba(26, 35, 50, 0.06);
+
+        [data-theme="dark"] body::before {
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(13, 148, 136, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
         }
-        .header .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1a2332;
-            display: inline-flex;
+
+        /* ===== LAYOUT ===== */
+        .app {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .brand {
+            display: flex;
             align-items: center;
             gap: 12px;
-            letter-spacing: -0.5px;
+            padding: 8px 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 12px;
         }
-        .header .logo .icon {
-            font-size: 2rem;
-        }
-        .header .logo span {
-            color: #0d9488;
-            background: linear-gradient(135deg, #0d9488, #0f766e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .header .subtitle {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-top: 4px;
-            letter-spacing: 0.3px;
-        }
-        .header .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            color: #64748b;
-            background: rgba(13, 148, 136, 0.08);
-            padding: 4px 16px;
-            border-radius: 20px;
-            margin-top: 6px;
-        }
-        .header .status .dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #0d9488;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 25px;
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 6px;
-            border: 1px solid rgba(26, 35, 50, 0.06);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 12px;
-            background: transparent;
-            color: #64748b;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+            flex-shrink: 0;
         }
-        .tab-btn:hover {
-            color: #1a2332;
-            background: rgba(26, 35, 50, 0.04);
-        }
-        .tab-btn.active {
-            background: linear-gradient(135deg, #0d9488, #0f766e);
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(13, 148, 136, 0.25);
-        }
-        .tab-btn .badge {
-            font-size: 0.6rem;
-            background: rgba(255,255,255,0.2);
-            color: #fff;
-            padding: 2px 8px;
-            border-radius: 20px;
-        }
-        .tab-btn:not(.active) .badge {
-            background: rgba(26, 35, 50, 0.08);
-            color: #64748b;
-        }
-        
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            margin-bottom: 25px;
-        }
-        .stats-grid.hidden {
-            display: none;
-        }
-        @media (max-width: 768px) {
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-        }
-        
-        .stat-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 16px 20px;
-            border: 1px solid rgba(255,255,255,0.9);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-            transition: all 0.3s ease;
-        }
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-        }
-        .stat-card .label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .stat-card .value {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-top: 4px;
-        }
-        .stat-card .value.green { color: #0d9488; }
-        .stat-card .value.blue { color: #3b82f6; }
-        .stat-card .value.red { color: #ef4444; }
-        .stat-card .value.dark { color: #1a2332; }
-        
-        /* Card */
-        .card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 1.8rem;
-            border: 1px solid rgba(255,255,255,0.9);
-            box-shadow: 0 2px 16px rgba(0,0,0,0.04);
-            transition: all 0.3s ease;
-            display: none;
-        }
-        .card.active {
-            display: block;
-        }
-        .card .step {
-            font-size: 0.6rem;
-            font-weight: 700;
-            color: #0d9488;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-        .card .title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin: 0.2rem 0 0.15rem;
-            color: #1a2332;
-        }
-        .card .subtitle {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-bottom: 1rem;
-        }
-        .card .caption {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            margin-top: 0.4rem;
-        }
-        
-        /* File Upload */
-        .file-upload {
-            background: rgba(26, 35, 50, 0.03);
-            border: 2px dashed rgba(26, 35, 50, 0.1);
-            border-radius: 16px;
-            padding: 1.8rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .file-upload:hover {
-            border-color: #0d9488;
-            background: rgba(13, 148, 136, 0.04);
-        }
-        .file-upload .icon { font-size: 2.2rem; display: block; margin-bottom: 0.3rem; }
-        .file-upload .text { font-weight: 600; font-size: 0.9rem; color: #1a2332; }
-        .file-upload .hint { font-size: 0.75rem; color: #94a3b8; margin-top: 0.15rem; }
-        .file-upload .filename { color: #0d9488; font-weight: 600; margin-top: 0.4rem; font-size: 0.85rem; }
-        .file-upload.dragover {
-            border-color: #0d9488;
-            background: rgba(13, 148, 136, 0.06);
-        }
-        
-        /* Buttons */
-        .btn-group {
+
+        .brand-text {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 0.8rem 0 0.4rem;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
         }
-        .btn {
-            padding: 8px 18px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            justify-content: center;
-            min-height: 40px;
-        }
-        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        
-        .btn-success {
-            background: linear-gradient(135deg, #0d9488, #0f766e);
-            color: white;
-            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.2);
-        }
-        .btn-success:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(13, 148, 136, 0.3);
-        }
-        
-        .btn-purple {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
-            color: white;
-            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.2);
-        }
-        .btn-purple:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
-        }
-        
-        .btn-blue {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
-        }
-        .btn-blue:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
-        }
-        
-        .btn-outline {
-            background: rgba(26, 35, 50, 0.05);
-            border: 1px solid rgba(26, 35, 50, 0.08);
-            color: #475569;
-        }
-        .btn-outline:hover:not(:disabled) {
-            background: rgba(26, 35, 50, 0.08);
-            color: #1a2332;
-        }
-        
-        .btn-link-custom {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 8px 18px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-decoration: none;
-            color: #fff;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            min-height: 40px;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
-        }
-        .btn-link-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
-        }
-        
-        /* Table */
-        .table-wrap {
-            overflow-x: auto;
-            border-radius: 14px;
-            margin-top: 0.8rem;
-            background: rgba(26, 35, 50, 0.03);
-            border: 1px solid rgba(26, 35, 50, 0.05);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
-            color: #1a2332;
-        }
-        th {
-            background: rgba(26, 35, 50, 0.04);
-            text-align: left;
-            padding: 10px 14px;
-            font-weight: 600;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #64748b;
-            border-bottom: 1px solid rgba(26, 35, 50, 0.06);
-        }
-        td {
-            padding: 8px 14px;
-            border-bottom: 1px solid rgba(26, 35, 50, 0.04);
-            vertical-align: middle;
-        }
-        tr:hover td { background: rgba(13, 148, 136, 0.03); }
-        
-        .phone-valid { color: #0d9488; font-weight: 500; }
-        .phone-invalid { 
-            color: #dc2626; 
+
+        .brand-title {
+            font-size: 13px;
             font-weight: 700;
-            background: #fee2e2;
-            padding: 2px 8px;
-            border-radius: 4px;
+            color: var(--text-primary);
+            line-height: 1.2;
+            letter-spacing: -0.01em;
         }
-        .phone-warning { color: #f59e0b; font-weight: 500; }
-        .phone-error {
-            color: #dc2626;
-            font-weight: 700;
-            background: #fee2e2;
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-        .row-number { color: #94a3b8; font-size: 0.7rem; font-weight: 600; }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.65rem;
-            font-weight: 600;
-        }
-        .status-ready { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-        .status-done { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
-        .status-error { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-        .status-processing { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-        
-        /* Carrier badges - Màu sắc theo yêu cầu */
-        .carrier-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #fff;
-        }
-        .carrier-viettel { background: #dc2626; }      /* Đỏ */
-        .carrier-vinaphone { background: #1a56db; }    /* Xanh biển đậm */
-        .carrier-mobifone { background: #3b82f6; }     /* Xanh biển nhạt */
-        .carrier-vietnamobile { background: #d97706; } /* Vàng */
-        .carrier-khac { background: #1a2332; }         /* Đen */
-        
-        .short-link {
-            color: #0d9488;
-            text-decoration: none;
+
+        .brand-subtitle {
+            font-size: 10px;
+            color: var(--text-muted);
             font-weight: 500;
-            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        .short-link:hover { text-decoration: underline; }
-        
-        .empty-state {
-            text-align: center;
-            color: #94a3b8;
-            padding: 30px 0;
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 8px;
         }
-        .empty-state .icon { font-size: 2rem; display: block; margin-bottom: 0.3rem; }
-        
-        .progress-bar {
-            height: 3px;
-            background: rgba(26, 35, 50, 0.06);
-            border-radius: 4px;
-            margin: 8px 0;
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 8px 12px 4px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 12px;
+            border-radius: var(--radius-md);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            width: 100%;
+            position: relative;
             overflow: hidden;
         }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: var(--primary);
+            border-radius: 0 4px 4px 0;
+            transition: height 0.25s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .nav-btn.active::before {
+            height: 24px;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn.active .nav-badge {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+        }
+
+        .theme-toggle .theme-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover .theme-icon {
+            transform: rotate(20deg);
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.3;
+            animation: pulseRing 2s infinite;
+        }
+
+        @keyframes pulseRing {
+            0% { transform: scale(0.8); opacity: 0.6; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            padding: 32px 40px;
+            max-width: 1600px;
+            overflow-x: hidden;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .page-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .page-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .page-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            max-width: 640px;
+        }
+
+        /* ===== STATS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border-strong);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .stat-icon.green { background: var(--primary-bg); color: var(--primary); }
+        .stat-icon.blue { background: var(--blue-bg); color: var(--blue); }
+        .stat-icon.red { background: var(--red-bg); color: var(--red); }
+        .stat-icon.dark { background: var(--bg-tertiary); color: var(--text-primary); }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-value.green { color: var(--primary); }
+        .stat-value.blue { color: var(--blue); }
+        .stat-value.red { color: var(--red); }
+        .stat-value.dark { color: var(--text-primary); }
+
+        .stat-footer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ===== CONTENT CARD ===== */
+        .content-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-2xl);
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+            display: none;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .content-card.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-number {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+        }
+
+        .card-title-group {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ===== UPLOAD ZONE (COMPACT) ===== */
+        .upload-zone {
+            background: var(--bg-tertiary);
+            border: 1.5px dashed var(--border-strong);
+            border-radius: var(--radius-md);
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+        }
+
+        .upload-zone::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, var(--primary-bg), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+            transform: translateY(-1px);
+        }
+
+        .upload-zone:hover::before {
+            opacity: 1;
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+            transform: scale(1.005);
+        }
+
+        .upload-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(13, 148, 136, 0.25);
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .upload-zone:hover .upload-icon {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .upload-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .upload-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .upload-arrow {
+            font-size: 16px;
+            color: var(--text-muted);
+            transition: transform 0.25s ease;
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .upload-zone:hover .upload-arrow {
+            transform: translateX(4px);
+            color: var(--primary);
+        }
+
+        .upload-filename {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .upload-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            background: var(--blue-bg);
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* ===== BUTTONS ===== */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 16px 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 18px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            min-height: 42px;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: -0.01em;
+        }
+
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn:not(:disabled):hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:not(:disabled):active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+        }
+        .btn-primary:not(:disabled):hover {
+            box-shadow: 0 8px 24px rgba(13, 148, 136, 0.4);
+        }
+
+        .btn-blue {
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+        .btn-blue:not(:disabled):hover {
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-purple {
+            background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+        .btn-purple:not(:disabled):hover {
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-ghost {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        .btn-ghost:not(:disabled):hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+        }
+
+        .btn-danger {
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:not(:disabled):hover {
+            background: var(--red);
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .btn-processing {
+            color: transparent !important;
+            pointer-events: none;
+        }
+        .btn-processing::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== PROGRESS ===== */
+        .progress-wrap {
+            margin: 14px 0 8px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #0d9488, #0f766e);
-            transition: width 0.3s ease;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 6px;
+            transition: width 0.4s ease;
+            position: relative;
         }
-        
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            color: #1a2332;
-            padding: 12px 24px;
-            border-radius: 14px;
-            border: 1px solid rgba(26, 35, 50, 0.06);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ===== TABLE ===== */
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 20px 0 12px;
+            flex-wrap: wrap;
+        }
+
+        .table-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-stats {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .table-stat {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: var(--bg-tertiary);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .table-stat strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .table-stat.green { background: var(--primary-bg); color: var(--primary); }
+        .table-stat.green strong { color: var(--primary); }
+        .table-stat.red { background: var(--red-bg); color: var(--red); }
+        .table-stat.red strong { color: var(--red); }
+
+        .table-container {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+            max-height: 560px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 13px;
-            transform: translateY(120px);
-            opacity: 0;
-            transition: all 0.4s ease;
-            z-index: 999;
-            max-width: 90%;
         }
-        .toast.show { transform: translateY(0); opacity: 1; }
-        .toast.success { border-color: rgba(13, 148, 136, 0.2); }
-        .toast.error { border-color: rgba(239, 68, 68, 0.2); }
-        .toast.info { border-color: rgba(59, 130, 246, 0.2); }
-        
-        .footer {
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 700;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            color: var(--text-primary);
+        }
+
+        tbody tr {
+            transition: background 0.15s ease;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .row-num {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .cell-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .phone {
+            font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .phone-valid {
+            color: var(--primary);
+            background: var(--primary-bg);
+        }
+
+        .phone-error {
+            color: var(--red);
+            background: var(--red-bg);
+            position: relative;
+        }
+
+        .phone-error::after {
+            content: '!';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            margin-left: 4px;
+            border-radius: 50%;
+            background: var(--red);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .phone-invalid {
+            color: var(--amber);
+            background: var(--amber-bg);
+        }
+
+        .carrier {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.01em;
+        }
+
+        .carrier::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+        }
+
+        .carrier-viettel { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        .carrier-vinaphone { background: linear-gradient(135deg, #1a56db, #1e40af); }
+        .carrier-mobifone { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .carrier-vietnamobile { background: linear-gradient(135deg, #d97706, #b45309); }
+        .carrier-khac { background: linear-gradient(135deg, #334155, #1e293b); }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .status-ready { background: var(--blue-bg); color: var(--blue); }
+        .status-done { background: var(--primary-bg); color: var(--primary); }
+        .status-error { background: var(--red-bg); color: var(--red); }
+        .status-processing { background: var(--amber-bg); color: var(--amber); }
+
+        .link-cell {
+            max-width: 260px;
+        }
+
+        .short-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: var(--primary-bg);
+            transition: all 0.2s ease;
+        }
+
+        .short-link:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: translateX(2px);
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty {
             text-align: center;
-            color: #94a3b8;
-            font-size: 0.75rem;
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(26, 35, 50, 0.06);
+            padding: 60px 20px;
+            color: var(--text-muted);
         }
-        
-        @media (max-width: 600px) {
-            .btn-group { flex-direction: column; }
-            .btn { flex: none; }
-            .header .logo { font-size: 1.4rem; }
-            .tabs { max-width: 100%; flex-direction: column; }
-            .tab-btn { padding: 10px; }
+
+        .empty-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 16px;
+            border-radius: var(--radius-lg);
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            opacity: 0.7;
         }
+
+        .empty-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .empty-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ===== TOAST ===== */
+        .toast-wrap {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-xl);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            min-width: 280px;
+            max-width: 420px;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon { background: var(--primary-bg); color: var(--primary); }
+        .toast.error .toast-icon { background: var(--red-bg); color: var(--red); }
+        .toast.info .toast-icon { background: var(--blue-bg); color: var(--blue); }
+
+        .toast-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .toast-msg {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ===== MOBILE ===== */
+        .mobile-header {
+            display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 280px;
+                z-index: 100;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                box-shadow: var(--shadow-xl);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 20px;
+                background: var(--bg-secondary);
+                border-bottom: 1px solid var(--border-color);
+                position: sticky;
+                top: 0;
+                z-index: 50;
+            }
+
+            .mobile-brand {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            .mobile-toggle {
+                width: 40px;
+                height: 40px;
+                border-radius: var(--radius-md);
+                border: 1px solid var(--border-color);
+                background: var(--bg-tertiary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                font-size: 18px;
+                color: var(--text-primary);
+            }
+
+            .main {
+                padding: 20px;
+            }
+
+            .overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(15, 23, 42, 0.5);
+                backdrop-filter: blur(4px);
+                z-index: 99;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+
+            .overlay.show {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .main { padding: 16px; }
+            .page-title { font-size: 20px; }
+            .stat-value { font-size: 26px; }
+            .content-card { padding: 20px; }
+            .action-grid { grid-template-columns: 1fr; }
+            .table-header { flex-direction: column; align-items: flex-start; }
+            .toast-wrap { left: 16px; right: 16px; bottom: 16px; }
+            .toast { min-width: auto; max-width: none; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">
-            <span class="icon">🏥</span>
-            Hệ thống <span>SMS</span> Bệnh viện Đa khoa Ninh Thuận
-        </div>
-        <div class="subtitle">Cổng điều phối tin nhắn chăm sóc sức khỏe</div>
-        <div class="status">
-            <span class="dot"></span>
-            Hệ thống đang hoạt động
-        </div>
+<!-- Mobile Header -->
+<div class="mobile-header">
+    <div class="mobile-brand">
+        <span>🏥</span>
+        <span>SMS Bệnh viện</span>
     </div>
+    <button class="mobile-toggle" id="mobileToggle">☰</button>
+</div>
 
-    <!-- Stats -->
-    <div class="stats-grid" id="statsGrid">
-        <div class="stat-card">
-            <div class="label">✅ Đã rút gọn</div>
-            <div class="value green" id="statShortened">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="label">📱 SĐT hợp lệ</div>
-            <div class="value blue" id="statValidPhones">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="label">⚠️ SĐT cảnh báo</div>
-            <div class="value red" id="statWarningPhones">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="label">📊 Tổng số dòng</div>
-            <div class="value dark" id="statTotal">0</div>
-        </div>
-    </div>
+<div class="overlay" id="overlay"></div>
 
-    <!-- Tabs -->
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="tab1">
-            🔗 Rút gọn link
-            <span class="badge" id="badgeLink">0</span>
-        </button>
-        <button class="tab-btn" data-tab="tab2">
-            💉 Xử lý Vaccine
-            <span class="badge" id="badgeVaccine">0</span>
-        </button>
-    </div>
+<div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-icon">🏥</div>
+            <div class="brand-text">
+                <div class="brand-title">Bệnh viện Đa khoa</div>
+                <div class="brand-subtitle">Ninh Thuận</div>
+            </div>
+        </div>
 
-    <!-- Tab 1: Rút gọn link -->
-    <div class="card active" id="tab1">
-        <div class="step">CHỨC NĂNG 01</div>
-        <div class="title">🔗 Rút gọn link Google Drive</div>
-        <div class="subtitle">Tải file Excel chứa link Google Drive để rút gọn và phân loại theo nhà mạng.</div>
-        
-        <div class="file-upload" id="dropZone1">
-            <span class="icon">📂</span>
-            <div class="text">Chọn file Excel</div>
-            <div class="hint">Hỗ trợ: .xlsx, .xls</div>
-            <div class="filename" id="fileName1"></div>
-            <input type="file" id="fileInput1" accept=".xlsx,.xls" style="display:none;">
+        <div class="nav-section">
+            <div class="nav-label">Chức năng</div>
+            <button class="nav-btn active" data-tab="tab1">
+                <span class="nav-icon">🔗</span>
+                <span>Rút gọn link</span>
+                <span class="nav-badge" id="badgeLink">0</span>
+            </button>
+            <button class="nav-btn" data-tab="tab2">
+                <span class="nav-icon">💉</span>
+                <span>Xử lý Vaccine</span>
+                <span class="nav-badge" id="badgeVaccine">0</span>
+            </button>
         </div>
-        
-        <div class="caption">📌 File cần có các cột: HoTen, SoDT, Link goc</div>
-        
-        <div class="btn-group">
-            <button class="btn btn-success" id="btnShortenAll" disabled>⚡ Rút gọn tất cả</button>
-            <button class="btn btn-blue" id="btnFixPhone" disabled>📱 Chuẩn hóa SĐT</button>
-            <button class="btn btn-purple" id="btnExportZip" disabled>📦 Xuất ZIP theo nhà mạng</button>
-            <button class="btn btn-outline" id="btnExportExcel" disabled>📥 Xuất Excel gốc</button>
-        </div>
-        
-        <div class="progress-bar"><div class="progress-fill" id="progress1"></div></div>
-        
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width:40px;">#</th>
-                        <th>Họ tên</th>
-                        <th>SĐT</th>
-                        <th>Nhà mạng</th>
-                        <th>Link rút gọn</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody1">
-                    <tr><td colspan="5" class="empty-state">
-                        <span class="icon">📋</span>
-                        Chưa có dữ liệu
-                    </td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 
-    <!-- Tab 2: Xử lý Vaccine -->
-    <div class="card" id="tab2">
-        <div class="step">CHỨC NĂNG 02</div>
-        <div class="title">💉 Xử lý danh sách tiêm chủng</div>
-        <div class="subtitle">Tải báo cáo tiêm chủng để tạo danh sách nhắc lịch hẹn tái khám theo nhà mạng.</div>
-        
-        <div class="file-upload" id="dropZone2">
-            <span class="icon">📂</span>
-            <div class="text">Chọn file Excel vaccine</div>
-            <div class="hint">Hỗ trợ: .xlsx</div>
-            <div class="filename" id="fileName2"></div>
-            <input type="file" id="fileInput2" accept=".xlsx" style="display:none;">
+        <div class="sidebar-footer">
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-icon">🌙</span>
+                <span>Chế độ tối</span>
+            </button>
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span>Hệ thống hoạt động</span>
+            </div>
         </div>
-        
-        <div class="caption">📌 File cần có các cột: Họ tên, Điện thoại, Vắc xin, Ngày hẹn</div>
-        
-        <div class="btn-group">
-            <button class="btn btn-success" id="btnProcess2" disabled>⚡ Xử lý dữ liệu</button>
-            <button class="btn btn-purple" id="btnExportZip2" disabled>📥 TẢI FILE ZIP VACCINE</button>
-        </div>
-        
-        <a href="#" class="btn-link-custom" id="btnSendSms" target="_blank">🚀 GỬI TIN NHẮN</a>
-        
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width:40px;">#</th>
-                        <th>SĐT</th>
-                        <th>Họ tên</th>
-                        <th>Nhà mạng</th>
-                        <th>VACXIN</th>
-                        <th>NGÀY TÁI KHÁM</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody2">
-                    <tr><td colspan="6" class="empty-state">
-                        <span class="icon">📋</span>
-                        Chưa có dữ liệu
-                    </td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    </aside>
 
-    <div class="footer">Hệ thống SMS Bệnh viện Đa khoa Ninh Thuận © 2026 · Phiên bản 2.0</div>
+    <!-- Main -->
+    <main class="main">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title-group">
+                <div class="page-eyebrow" id="pageEyebrow">🔗 CHỨC NĂNG 01</div>
+                <h1 class="page-title" id="pageTitle">Rút gọn link Google Drive</h1>
+                <p class="page-subtitle" id="pageSubtitle">Tải file Excel chứa link Google Drive để rút gọn và phân loại theo nhà mạng.</p>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Đã rút gọn</span>
+                    <div class="stat-icon green">✅</div>
+                </div>
+                <div class="stat-value green" id="statShortened">0</div>
+                <div class="stat-footer">Link đã rút thành công</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">SĐT hợp lệ</span>
+                    <div class="stat-icon blue">📱</div>
+                </div>
+                <div class="stat-value blue" id="statValidPhones">0</div>
+                <div class="stat-footer">Sẵn sàng gửi tin</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">SĐT cảnh báo</span>
+                    <div class="stat-icon red">⚠️</div>
+                </div>
+                <div class="stat-value red" id="statWarningPhones">0</div>
+                <div class="stat-footer">Cần kiểm tra lại</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Tổng số dòng</span>
+                    <div class="stat-icon dark">📊</div>
+                </div>
+                <div class="stat-value dark" id="statTotal">0</div>
+                <div class="stat-footer">Bản ghi trong file</div>
+            </div>
+        </div>
+
+        <!-- TAB 1 -->
+        <div class="content-card active" id="tab1">
+            <div class="card-header">
+                <div class="card-number">01</div>
+                <div class="card-title-group">
+                    <div class="card-title">🔗 Rút gọn link Google Drive</div>
+                    <div class="card-subtitle">Tải file Excel chứa link Google Drive để rút gọn và phân loại theo nhà mạng.</div>
+                </div>
+            </div>
+
+            <div class="upload-zone" id="dropZone1">
+                <div class="upload-icon">📂</div>
+                <div class="upload-content">
+                    <div class="upload-title">Chọn file Excel</div>
+                    <div class="upload-hint">Kéo thả hoặc nhấp để chọn · .xlsx, .xls</div>
+                    <div id="fileName1"></div>
+                </div>
+                <div class="upload-arrow">→</div>
+                <input type="file" id="fileInput1" accept=".xlsx,.xls" style="display:none;">
+            </div>
+
+            <div class="upload-info">
+                <span>📌</span>
+                <span>File cần có các cột: <strong>HoTen</strong>, <strong>SoDT</strong>, <strong>Link goc</strong></span>
+            </div>
+
+            <div class="action-grid">
+                <button class="btn btn-primary" id="btnShortenAll" disabled>⚡ Rút gọn tất cả</button>
+                <button class="btn btn-blue" id="btnFixPhone" disabled>📱 Chuẩn hóa SĐT</button>
+                <button class="btn btn-purple" id="btnExportZip" disabled>📦 Xuất ZIP theo nhà mạng</button>
+                <button class="btn btn-danger" id="btnClearData1" disabled>🗑️ Xóa dữ liệu</button>
+            </div>
+
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Tiến độ rút gọn</span>
+                    <span id="progressText1">0%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" id="progress1"></div></div>
+            </div>
+
+            <div class="table-header">
+                <div class="table-title">📋 Danh sách dữ liệu</div>
+                <div class="table-stats">
+                    <span class="table-stat">Tổng: <strong id="rowCount1">0</strong></span>
+                    <span class="table-stat green">Đã rút: <strong id="shortenedCount1">0</strong></span>
+                    <span class="table-stat red">Lỗi: <strong id="errorCount1">0</strong></span>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th>Họ tên</th>
+                                <th>SĐT</th>
+                                <th>Nhà mạng</th>
+                                <th>Link rút gọn</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody1">
+                            <tr><td colspan="5">
+                                <div class="empty">
+                                    <div class="empty-icon">📋</div>
+                                    <div class="empty-title">Chưa có dữ liệu</div>
+                                    <div class="empty-text">Tải lên file Excel để bắt đầu</div>
+                                </div>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2 -->
+        <div class="content-card" id="tab2">
+            <div class="card-header">
+                <div class="card-number" style="background: linear-gradient(135deg, var(--purple), var(--purple-dark)); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);">02</div>
+                <div class="card-title-group">
+                    <div class="card-title">💉 Xử lý danh sách tiêm chủng</div>
+                    <div class="card-subtitle">Tải báo cáo tiêm chủng để tạo danh sách nhắc lịch hẹn tái khám theo nhà mạng.</div>
+                </div>
+            </div>
+
+            <div class="upload-zone" id="dropZone2">
+                <div class="upload-icon" style="background: linear-gradient(135deg, var(--purple), var(--purple-dark)); box-shadow: 0 4px 10px rgba(124, 58, 237, 0.25);">📂</div>
+                <div class="upload-content">
+                    <div class="upload-title">Chọn file Excel vaccine</div>
+                    <div class="upload-hint">Kéo thả hoặc nhấp để chọn · .xlsx</div>
+                    <div id="fileName2"></div>
+                </div>
+                <div class="upload-arrow">→</div>
+                <input type="file" id="fileInput2" accept=".xlsx" style="display:none;">
+            </div>
+
+            <div class="upload-info">
+                <span>📌</span>
+                <span>File cần có các cột: <strong>Họ tên</strong>, <strong>Điện thoại</strong>, <strong>Vắc xin</strong>, <strong>Ngày hẹn</strong></span>
+            </div>
+
+            <div class="action-grid">
+                <button class="btn btn-primary" id="btnProcess2" disabled>⚡ Xử lý dữ liệu</button>
+                <button class="btn btn-purple" id="btnExportZip2" disabled>📥 Tải file ZIP Vaccine</button>
+                <button class="btn btn-danger" id="btnClearData2" disabled>🗑️ Xóa dữ liệu</button>
+            </div>
+
+            <a href="#" class="btn btn-blue btn-block" id="btnSendSms" target="_blank" style="margin-bottom: 20px;">🚀 Gửi tin nhắn</a>
+
+            <div class="table-header">
+                <div class="table-title">📋 Danh sách vaccine</div>
+                <div class="table-stats">
+                    <span class="table-stat">Tổng: <strong id="rowCount2">0</strong></span>
+                    <span class="table-stat green">Hợp lệ: <strong id="validCount2">0</strong></span>
+                    <span class="table-stat red">Lỗi: <strong id="errorCount2">0</strong></span>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th>SĐT</th>
+                                <th>Họ tên</th>
+                                <th>Nhà mạng</th>
+                                <th>VACXIN</th>
+                                <th>NGÀY TÁI KHÁM</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody2">
+                            <tr><td colspan="6">
+                                <div class="empty">
+                                    <div class="empty-icon">💉</div>
+                                    <div class="empty-title">Chưa có dữ liệu</div>
+                                    <div class="empty-text">Tải lên file Excel vaccine để bắt đầu</div>
+                                </div>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
 
 <!-- Toast -->
-<div id="toast" class="toast"></div>
+<div class="toast-wrap" id="toastWrap"></div>
 
-<!-- Thư viện -->
+<!-- Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -628,21 +1512,45 @@
 (function() {
     'use strict';
 
-    // ---------- STATE ----------
+    // Fallback FileSaver
+    if (typeof saveAs === 'undefined') {
+        window.saveAs = function(blob, filename) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        };
+    }
+
+    // ===== STATE =====
     const state = {
         link: { data: [], fileName: '', isProcessing: false },
         vaccine: { data: [], fileName: '', downloadCount: 0 }
     };
 
-    // ---------- HELPERS ----------
-    function showToast(message, type = 'info', duration = 3000) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.className = 'toast';
-        toast.classList.add(type);
-        toast.classList.add('show');
-        clearTimeout(toast._timer);
-        toast._timer = setTimeout(() => toast.classList.remove('show'), duration);
+    // ===== TOAST =====
+    function showToast(message, type = 'info', duration = 3500) {
+        const wrap = document.getElementById('toastWrap');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icons = { success: '✓', error: '✕', info: 'ℹ' };
+        const titles = { success: 'Thành công', error: 'Lỗi', info: 'Thông báo' };
+        toast.innerHTML = `
+            <div class="toast-icon">${icons[type] || 'ℹ'}</div>
+            <div class="toast-content">
+                <div class="toast-title">${titles[type] || 'Thông báo'}</div>
+                <div class="toast-msg">${message}</div>
+            </div>
+        `;
+        wrap.appendChild(toast);
+        requestAnimationFrame(() => toast.classList.add('show'));
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 400);
+        }, duration);
     }
 
     function escapeHtml(text) {
@@ -652,26 +1560,79 @@
         return div.innerHTML;
     }
 
-    // ---------- TABS ----------
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            document.getElementById(this.dataset.tab).classList.add('active');
-            
-            const statsGrid = document.getElementById('statsGrid');
-            if (this.dataset.tab === 'tab1') {
-                statsGrid.classList.remove('hidden');
-            } else {
-                statsGrid.classList.add('hidden');
-            }
-        });
+    function setButtonProcessing(btnId, processing) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        btn.classList.toggle('btn-processing', processing);
+        btn.disabled = processing;
+    }
+
+    // ===== TABS =====
+    function switchTab(tabId) {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+        document.querySelectorAll('.content-card').forEach(c => c.classList.toggle('active', c.id === tabId));
+        
+        const eyebrow = document.getElementById('pageEyebrow');
+        const title = document.getElementById('pageTitle');
+        const subtitle = document.getElementById('pageSubtitle');
+        
+        if (tabId === 'tab1') {
+            eyebrow.textContent = '🔗 CHỨC NĂNG 01';
+            title.textContent = 'Rút gọn link Google Drive';
+            subtitle.textContent = 'Tải file Excel chứa link Google Drive để rút gọn và phân loại theo nhà mạng.';
+            document.getElementById('statsGrid').style.display = 'grid';
+        } else {
+            eyebrow.textContent = '💉 CHỨC NĂNG 02';
+            title.textContent = 'Xử lý danh sách tiêm chủng';
+            subtitle.textContent = 'Tải báo cáo tiêm chủng để tạo danh sách nhắc lịch hẹn tái khám theo nhà mạng.';
+            document.getElementById('statsGrid').style.display = 'none';
+        }
+        
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
 
-    document.getElementById('statsGrid').classList.remove('hidden');
+    // Mobile menu
+    document.getElementById('mobileToggle').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('show');
+    });
+    document.getElementById('overlay').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    });
 
-    // ---------- REMOVE ACCENTS ----------
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeButton(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        updateThemeButton(next);
+    });
+
+    function updateThemeButton(theme) {
+        const icon = themeToggle.querySelector('.theme-icon');
+        const text = themeToggle.querySelector('span:last-child');
+        if (theme === 'dark') {
+            icon.textContent = '☀️';
+            text.textContent = 'Chế độ sáng';
+        } else {
+            icon.textContent = '🌙';
+            text.textContent = 'Chế độ tối';
+        }
+    }
+
+    // ===== REMOVE ACCENTS =====
     function removeAccents(s) {
         if (!s || typeof s !== 'string') return '';
         return s.normalize('NFKD')
@@ -680,10 +1641,9 @@
             .replace(/Đ/g, 'D');
     }
 
-    // ---------- FORMAT PHONE & CHECK LENGTH ----------
+    // ===== FORMAT PHONE =====
     function formatPhone(phoneVal) {
         if (!phoneVal || String(phoneVal).trim() === '') return { phone: null, isValid: false, isError: false };
-        
         let phoneStr = String(phoneVal).split('.')[0].trim();
         let phoneDigits = phoneStr.replace(/\D/g, '');
         
@@ -696,43 +1656,26 @@
         }
         
         const len = phoneDigits.length;
-        let isValid = false;
-        let isError = false;
+        let isValid = false, isError = false;
+        if (len === 11) isValid = true;
+        else if (len === 12) { isValid = false; isError = true; }
+        else { isValid = false; isError = true; }
         
-        if (len === 11) {
-            isValid = true;
-        } else if (len === 12) {
-            isValid = false;
-            isError = true;
-        } else {
-            isValid = false;
-            isError = true;
-        }
-        
-        return { phone: phoneDigits, isValid: isValid, isError: isError };
+        return { phone: phoneDigits, isValid, isError };
     }
 
-    // ---------- GET NETWORK ----------
+    // ===== GET NETWORK =====
     function getNetwork(phone) {
         if (!phone || phone.length < 5) return 'Khac';
         let p = String(phone).replace(/[^0-9]/g, '');
-        
-        if (p.length === 12) {
-            return 'Khac';
-        }
-        
-        if (p.startsWith('0')) {
-            p = '84' + p.substring(1);
-        }
-        if (!p.startsWith('84')) {
-            p = '84' + p;
-        }
-        
+        if (p.length === 12) return 'Khac';
+        if (p.startsWith('0')) p = '84' + p.substring(1);
+        if (!p.startsWith('84')) p = '84' + p;
         let pre = p.substring(0, 4);
         
         const viettel = ['8432','8433','8434','8435','8436','8437','8438','8439','8486','8496','8497','8498'];
-        const vinaphone = ['8481','8482','8483','8484','8485','8488','8491','8494'];
-        const mobifone = ['8470','8476','8477','8478','8479','8489','8493','8490'];
+        const vinaphone = ['8481','8482','8483','8484','8485','8488','8491','8494','8490'];
+        const mobifone = ['8470','8476','8477','8478','8479','8489','8493'];
         const vietnamobile = ['8452','8456','8458','8492'];
         
         if (viettel.includes(pre)) return 'Viettel';
@@ -757,7 +1700,6 @@
         return carrier === 'Khac' ? 'Khác' : carrier;
     }
 
-    // ---------- PROCESS VACCINE NAME ----------
     function processVaccineName(s) {
         if (!s) return '';
         let result = String(s);
@@ -766,29 +1708,31 @@
         return result;
     }
 
-    // ---------- GET NETWORK FILENAME ----------
-    function getNetworkFilename(network, count) {
+    function getNetworkFilename(network) {
         const baseMap = {'VinaPhone':'1', 'MobiFone':'2', 'Viettel':'3', 'Vietnamobile':'4'};
         const base = baseMap[network] || network;
-        const repeatedBase = String(base).repeat(count);
-        return (base in ['1','2','3','4']) ? `${repeatedBase}.xlsx` : `${base}.xlsx`;
+        return `${base}.xlsx`;
     }
 
-    // =============================================
-    // TAB 1: RÚT GỌN LINK
-    // =============================================
-
+    // ===== RENDER LINK TABLE =====
     function renderLinkTable() {
         const data = state.link.data;
         const tbody = document.getElementById('tableBody1');
         const progress = document.getElementById('progress1');
+        const progressText = document.getElementById('progressText1');
         
         if (!data.length) {
-            tbody.innerHTML = `<tr><td colspan="5" class="empty-state">
-                <span class="icon">📋</span>
-                Chưa có dữ liệu
+            tbody.innerHTML = `<tr><td colspan="5">
+                <div class="empty">
+                    <div class="empty-icon">📋</div>
+                    <div class="empty-title">Chưa có dữ liệu</div>
+                    <div class="empty-text">Tải lên file Excel để bắt đầu</div>
+                </div>
             </td></tr>`;
             updateStats();
+            updateLinkTableInfo();
+            progress.style.width = '0%';
+            progressText.textContent = '0%';
             return;
         }
 
@@ -796,57 +1740,62 @@
         let rowNum = 1;
         for (let row of data) {
             let statusBadge = '';
-            if (row.status === 'ready') statusBadge = `<span class="status-badge status-ready">Sẵn sàng</span>`;
-            else if (row.status === 'processing') statusBadge = `<span class="status-badge status-processing">⏳ Đang rút...</span>`;
-            else if (row.status === 'done') statusBadge = `<span class="status-badge status-done">✓ Đã rút gọn</span>`;
-            else if (row.status === 'error') statusBadge = `<span class="status-badge status-error">⚠️ Lỗi</span>`;
+            if (row.status === 'ready') statusBadge = `<span class="status status-ready">Sẵn sàng</span>`;
+            else if (row.status === 'processing') statusBadge = `<span class="status status-processing">Đang rút</span>`;
+            else if (row.status === 'done') statusBadge = `<span class="status status-done">Hoàn tất</span>`;
+            else if (row.status === 'error') statusBadge = `<span class="status status-error">Lỗi</span>`;
 
             let phoneDisplay = '';
             if (row.SoDT) {
-                if (row.phoneError) {
-                    phoneDisplay = `<span class="phone-error">${escapeHtml(row.SoDT)} !</span>`;
-                } else if (row.phoneStatus === 'valid') {
-                    phoneDisplay = `<span class="phone-valid">${escapeHtml(row.SoDT)}</span>`;
-                } else if (row.phoneStatus === 'warning') {
-                    phoneDisplay = `<span class="phone-warning">${escapeHtml(row.SoDT)} ⚠️</span>`;
-                } else {
-                    phoneDisplay = `<span class="phone-invalid">${escapeHtml(row.SoDT)} ⚠️</span>`;
-                }
+                if (row.phoneError) phoneDisplay = `<span class="phone phone-error">${escapeHtml(row.SoDT)}</span>`;
+                else if (row.phoneStatus === 'valid') phoneDisplay = `<span class="phone phone-valid">${escapeHtml(row.SoDT)}</span>`;
+                else phoneDisplay = `<span class="phone phone-invalid">${escapeHtml(row.SoDT)}</span>`;
             } else {
-                phoneDisplay = `<span style="color:#94a3b8;">—</span>`;
+                phoneDisplay = `<span style="color:var(--text-muted);">—</span>`;
             }
 
             let carrierDisplay = '';
             if (row.NhaMang) {
-                const cls = getCarrierClass(row.NhaMang);
-                const display = getCarrierDisplay(row.NhaMang);
-                carrierDisplay = `<span class="carrier-badge ${cls}">${escapeHtml(display)}</span>`;
+                carrierDisplay = `<span class="carrier ${getCarrierClass(row.NhaMang)}">${escapeHtml(getCarrierDisplay(row.NhaMang))}</span>`;
             } else {
-                carrierDisplay = `<span style="color:#94a3b8;">—</span>`;
+                carrierDisplay = `<span style="color:var(--text-muted);">—</span>`;
             }
 
             let linkDisplay = row.linkRutGon ? 
-                `<a href="${escapeHtml(row.linkRutGon)}" target="_blank" class="short-link">${escapeHtml(row.linkRutGon)}</a>` : 
-                `<span style="color:#94a3b8;">—</span>`;
+                `<a href="${escapeHtml(row.linkRutGon)}" target="_blank" class="short-link">🔗 ${escapeHtml(row.linkRutGon)}</a>` : 
+                `<span style="color:var(--text-muted);">—</span>`;
 
             html += `<tr>
-                <td><span class="row-number">${rowNum}</span></td>
-                <td><strong>${escapeHtml(row.HoTen || '')}</strong></td>
+                <td><span class="row-num">${rowNum}</span></td>
+                <td><span class="cell-name">${escapeHtml(row.HoTen || '')}</span></td>
                 <td>${phoneDisplay}</td>
                 <td>${carrierDisplay}</td>
-                <td>${linkDisplay} ${statusBadge}</td>
+                <td class="link-cell">${linkDisplay} ${statusBadge}</td>
             </tr>`;
             rowNum++;
         }
         tbody.innerHTML = html;
         
         const total = data.length;
-        const done = data.filter(r => r.status === 'done' || r.status === 'error').length;
-        progress.style.width = total ? Math.round((done / total) * 100) + '%' : '0%';
+        const done = data.filter(r => r.status === 'done').length;
+        const error = data.filter(r => r.status === 'error').length;
+        const progressPercent = total ? Math.round(((done + error) / total) * 100) : 0;
+        progress.style.width = progressPercent + '%';
+        progressText.textContent = progressPercent + '%';
+        
         updateStats();
+        updateLinkTableInfo();
     }
 
-    // ---------- LOAD LINK FILE ----------
+    function updateLinkTableInfo() {
+        const data = state.link.data;
+        document.getElementById('rowCount1').textContent = data.length;
+        document.getElementById('shortenedCount1').textContent = data.filter(r => r.status === 'done').length;
+        document.getElementById('errorCount1').textContent = data.filter(r => r.status === 'error').length;
+        document.getElementById('badgeLink').textContent = data.length;
+    }
+
+    // ===== LOAD LINK FILE =====
     function loadLinkFile(file) {
         if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
             showToast('Vui lòng chọn file Excel (.xlsx hoặc .xls)', 'error');
@@ -854,7 +1803,7 @@
         }
         
         state.link.fileName = file.name;
-        document.getElementById('fileName1').textContent = `📎 ${file.name}`;
+        document.getElementById('fileName1').innerHTML = `<div class="upload-filename">📎 ${escapeHtml(file.name)}</div>`;
         
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -871,8 +1820,7 @@
                 const colLinkGoc = headers.find(h => h.trim() === 'Link goc') || headers[3];
 
                 const newData = [];
-                let invalidCount = 0;
-                let errorCount = 0;
+                let invalidCount = 0, errorCount = 0;
                 
                 for (let row of json) {
                     let linkGoc = String(row[colLinkGoc] || '').trim();
@@ -881,10 +1829,7 @@
                     if (linkRutGon && !linkRutGon.startsWith('http')) linkRutGon = '';
                     
                     let soDT = String(row[colSoDT] || '').trim();
-                    let phoneStatus = 'unknown';
-                    let carrier = 'Khac';
-                    let formattedPhone = '';
-                    let phoneError = false;
+                    let phoneStatus = 'unknown', carrier = 'Khac', formattedPhone = '', phoneError = false;
                     
                     if (soDT) {
                         const result = formatPhone(soDT);
@@ -898,7 +1843,6 @@
                         } else if (result.isError) {
                             phoneStatus = 'error';
                             soDT = formattedPhone || soDT;
-                            carrier = 'Khac';
                             errorCount++;
                         } else {
                             phoneStatus = 'invalid';
@@ -910,27 +1854,19 @@
                     newData.push({
                         HoTen: String(row[colHoTen] || '').trim(),
                         SoDT: soDT,
-                        linkGoc: linkGoc,
-                        linkRutGon: linkRutGon,
+                        linkGoc, linkRutGon,
                         NhaMang: carrier,
                         status: linkRutGon ? 'done' : 'ready',
-                        phoneStatus: phoneStatus,
-                        phoneError: phoneError
+                        phoneStatus, phoneError
                     });
                 }
 
                 state.link.data = newData.filter(r => r.HoTen || r.SoDT || r.linkGoc);
                 renderLinkTable();
                 
-                let msg = `✅ Đã tải ${state.link.data.length} dòng.`;
-                if (errorCount > 0) {
-                    msg += ` ⚠️ ${errorCount} số bị lỗi (độ dài > 11) sẽ xuất vào Khac.xlsx!`;
-                }
-                if (invalidCount > 0) {
-                    msg += ` ⚠️ ${invalidCount} số không hợp lệ.`;
-                }
+                let msg = `Đã tải ${state.link.data.length} dòng dữ liệu`;
+                if (errorCount > 0) msg += ` · ${errorCount} số lỗi`;
                 showToast(msg, 'success');
-                document.getElementById('badgeLink').textContent = state.link.data.length;
                 updateButtons();
                 
             } catch (err) {
@@ -940,36 +1876,37 @@
         reader.readAsArrayBuffer(file);
     }
 
-    // ---------- SHORTEN LINK ----------
+    // ===== SHORTEN =====
     async function shortenLink(link) {
         if (!link) return { success: false };
         try {
             const resp = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(link)}`);
             if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
             const short = await resp.text();
-            if (short && short.startsWith('http')) {
-                return { success: true, shortUrl: short.trim() };
-            }
+            if (short && short.startsWith('http')) return { success: true, shortUrl: short.trim() };
             return { success: false };
         } catch {
             return { success: false };
         }
     }
 
-    // ---------- SHORTEN ALL ----------
     async function shortenAll() {
         if (state.link.isProcessing) return;
         const data = state.link.data;
-        if (!data.length) { showToast('Không có dữ liệu.', 'error'); return; }
+        if (!data.length) { showToast('Không có dữ liệu', 'error'); return; }
 
         const toShorten = data.filter(r => r.status !== 'done' && r.linkGoc);
-        if (!toShorten.length) { showToast('Tất cả link đã được rút gọn.', 'info'); return; }
+        if (!toShorten.length) { showToast('Tất cả link đã được rút gọn', 'info'); return; }
 
         state.link.isProcessing = true;
+        setButtonProcessing('btnShortenAll', true);
         updateButtons();
         showToast(`Đang rút gọn ${toShorten.length} link...`, 'info', 2000);
 
         let success = 0, fail = 0;
+        const progress = document.getElementById('progress1');
+        const progressText = document.getElementById('progressText1');
+        
         for (let i = 0; i < toShorten.length; i++) {
             const row = toShorten[i];
             const idx = data.indexOf(row);
@@ -987,23 +1924,29 @@
                 data[idx].status = 'error';
                 fail++;
             }
+            
+            const done = data.filter(r => r.status === 'done' || r.status === 'error').length;
+            const pct = Math.round((done / data.length) * 100);
+            progress.style.width = pct + '%';
+            progressText.textContent = pct + '%';
+            
             renderLinkTable();
             await new Promise(r => setTimeout(r, 300));
         }
 
         state.link.isProcessing = false;
+        setButtonProcessing('btnShortenAll', false);
         renderLinkTable();
         updateButtons();
-        showToast(`Hoàn thành: ${success} link rút gọn, ${fail} lỗi.`, success > 0 ? 'success' : 'error');
+        showToast(`Hoàn thành: ${success} thành công, ${fail} lỗi`, success > 0 ? 'success' : 'error');
     }
 
-    // ---------- FIX PHONES ----------
+    // ===== FIX PHONES =====
     function fixPhones() {
         const data = state.link.data;
-        if (!data.length) { showToast('Không có dữ liệu.', 'error'); return; }
+        if (!data.length) { showToast('Không có dữ liệu', 'error'); return; }
 
-        let fixed = 0;
-        let errorCount = 0;
+        let fixed = 0, errorCount = 0;
         for (let row of data) {
             if (row.SoDT) {
                 const result = formatPhone(row.SoDT);
@@ -1028,31 +1971,27 @@
             }
         }
         renderLinkTable();
-        let msg = `Đã chuẩn hóa ${fixed} số điện thoại.`;
-        if (errorCount > 0) {
-            msg += ` ⚠️ ${errorCount} số bị lỗi (độ dài > 11) sẽ xuất vào Khac.xlsx!`;
-        }
+        let msg = `Đã chuẩn hóa ${fixed} số điện thoại`;
+        if (errorCount > 0) msg += ` · ${errorCount} số lỗi`;
         showToast(msg, 'success');
     }
 
-    // ---------- EXPORT ZIP LINK ----------
+    // ===== EXPORT ZIP LINK =====
     function exportZipLink() {
         const validData = state.link.data.filter(r => r.phoneStatus === 'valid' && r.linkRutGon && r.SoDT);
         const errorData = state.link.data.filter(r => r.phoneError && r.linkRutGon && r.SoDT);
         
         if (!validData.length && !errorData.length) {
-            showToast('Không có dữ liệu hợp lệ để xuất.', 'error');
+            showToast('Không có dữ liệu hợp lệ để xuất', 'error');
             return;
         }
 
         const groups = {};
-        
         for (let row of validData) {
             const carrier = row.NhaMang || 'Khac';
             if (!groups[carrier]) groups[carrier] = [];
             groups[carrier].push({ 'Số điện thoại': row.SoDT, 'Link rút gọn': row.linkRutGon });
         }
-        
         if (errorData.length > 0) {
             if (!groups['Khac']) groups['Khac'] = [];
             for (let row of errorData) {
@@ -1073,45 +2012,40 @@
                 count++;
             }
             zip.generateAsync({ type: 'blob', compression: 'DEFLATE' })
-                .then(c => { saveAs(c, `SMS_By_Carrier_${Date.now()}.zip`);
-                    let msg = `✅ Đã xuất ZIP với ${count} file!`;
-                    if (errorData.length > 0) {
-                        msg += ` ⚠️ ${errorData.length} số lỗi (12 số) đã xuất vào Khac.xlsx!`;
-                    }
-                    showToast(msg, 'success'); })
+                .then(c => { 
+                    saveAs(c, `SMS_By_Carrier_${Date.now()}.zip`);
+                    showToast(`Đã xuất ZIP với ${count} file`, 'success');
+                })
                 .catch(() => showToast('Lỗi tạo ZIP', 'error'));
         } catch (e) { showToast('Lỗi: ' + e.message, 'error'); }
     }
 
-    // ---------- EXPORT EXCEL LINK ----------
-    function exportExcelLink() {
-        const data = state.link.data;
-        if (!data.length) { showToast('Không có dữ liệu.', 'error'); return; }
-        try {
-            const excelData = data.map(r => ({ 'HoTen': r.HoTen || '', 'SoDT': r.SoDT || '', 'linh rut gon': r.linkRutGon || '', 'Link goc': r.linkGoc || '' }));
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.json_to_sheet(excelData);
-            ws['!cols'] = [{ wch: 25 }, { wch: 15 }, { wch: 35 }, { wch: 50 }];
-            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-            const blob = new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'array' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            saveAs(blob, state.link.fileName || 'SMS_updated.xlsx');
-            showToast('Đã xuất file Excel thành công!', 'success');
-        } catch (e) { showToast('Lỗi: ' + e.message, 'error'); }
+    // ===== CLEAR =====
+    function clearDataLink() {
+        if (!state.link.data.length) return;
+        if (!confirm('Bạn có chắc chắn muốn xóa tất cả dữ liệu?')) return;
+        state.link.data = [];
+        state.link.fileName = '';
+        document.getElementById('fileName1').innerHTML = '';
+        renderLinkTable();
+        updateButtons();
+        showToast('Đã xóa dữ liệu', 'info');
     }
 
-    // =============================================
-    // TAB 2: VACCINE
-    // =============================================
-
+    // ===== VACCINE =====
     function renderVaccineTable() {
         const data = state.vaccine.data;
         const tbody = document.getElementById('tableBody2');
         
         if (!data.length) {
-            tbody.innerHTML = `<tr><td colspan="6" class="empty-state">
-                <span class="icon">📋</span>
-                Chưa có dữ liệu
+            tbody.innerHTML = `<tr><td colspan="6">
+                <div class="empty">
+                    <div class="empty-icon">💉</div>
+                    <div class="empty-title">Chưa có dữ liệu</div>
+                    <div class="empty-text">Tải lên file Excel vaccine để bắt đầu</div>
+                </div>
             </td></tr>`;
+            updateVaccineTableInfo();
             return;
         }
 
@@ -1120,30 +2054,24 @@
         for (let row of data) {
             let phoneDisplay = '';
             if (row.SoDT) {
-                if (row.phoneError) {
-                    phoneDisplay = `<span class="phone-error">${escapeHtml(row.SoDT)} !</span>`;
-                } else if (row.phoneStatus === 'valid') {
-                    phoneDisplay = `<span class="phone-valid">${escapeHtml(row.SoDT)}</span>`;
-                } else {
-                    phoneDisplay = `<span class="phone-invalid">${escapeHtml(row.SoDT)} ⚠️</span>`;
-                }
+                if (row.phoneError) phoneDisplay = `<span class="phone phone-error">${escapeHtml(row.SoDT)}</span>`;
+                else if (row.phoneStatus === 'valid') phoneDisplay = `<span class="phone phone-valid">${escapeHtml(row.SoDT)}</span>`;
+                else phoneDisplay = `<span class="phone phone-invalid">${escapeHtml(row.SoDT)}</span>`;
             } else {
-                phoneDisplay = `<span style="color:#94a3b8;">—</span>`;
+                phoneDisplay = `<span style="color:var(--text-muted);">—</span>`;
             }
             
             let carrierDisplay = '';
             if (row.NhaMang) {
-                const cls = getCarrierClass(row.NhaMang);
-                const display = getCarrierDisplay(row.NhaMang);
-                carrierDisplay = `<span class="carrier-badge ${cls}">${escapeHtml(display)}</span>`;
+                carrierDisplay = `<span class="carrier ${getCarrierClass(row.NhaMang)}">${escapeHtml(getCarrierDisplay(row.NhaMang))}</span>`;
             } else {
-                carrierDisplay = `<span style="color:#94a3b8;">—</span>`;
+                carrierDisplay = `<span style="color:var(--text-muted);">—</span>`;
             }
             
             html += `<tr>
-                <td><span class="row-number">${rowNum}</span></td>
+                <td><span class="row-num">${rowNum}</span></td>
                 <td>${phoneDisplay}</td>
-                <td><strong>${escapeHtml(row.ho_ten || '')}</strong></td>
+                <td><span class="cell-name">${escapeHtml(row.ho_ten || '')}</span></td>
                 <td>${carrierDisplay}</td>
                 <td>${escapeHtml(row.VACXIN || '')}</td>
                 <td>${escapeHtml(row.NGAYTAIKHAM || '')}</td>
@@ -1151,9 +2079,17 @@
             rowNum++;
         }
         tbody.innerHTML = html;
+        updateVaccineTableInfo();
     }
 
-    // ---------- LOAD VACCINE FILE ----------
+    function updateVaccineTableInfo() {
+        const data = state.vaccine.data;
+        document.getElementById('rowCount2').textContent = data.length;
+        document.getElementById('validCount2').textContent = data.filter(r => r.phoneStatus === 'valid').length;
+        document.getElementById('errorCount2').textContent = data.filter(r => r.phoneError).length;
+        document.getElementById('badgeVaccine').textContent = data.length;
+    }
+
     function loadVaccineFile(file) {
         if (!file.name.endsWith('.xlsx')) {
             showToast('Vui lòng chọn file Excel (.xlsx)', 'error');
@@ -1161,7 +2097,7 @@
         }
         
         state.vaccine.fileName = file.name;
-        document.getElementById('fileName2').textContent = `📎 ${file.name}`;
+        document.getElementById('fileName2').innerHTML = `<div class="upload-filename">📎 ${escapeHtml(file.name)}</div>`;
         
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -1218,8 +2154,7 @@
                         ho_ten: removeAccents(String(hoTen).trim()),
                         VACXIN: processVaccineName(String(values[colIndex.vacXin] || '').trim()),
                         NGAYTAIKHAM: String(values[colIndex.ngayHen] || '').trim(),
-                        phoneStatus: phoneStatus,
-                        phoneError: phoneError,
+                        phoneStatus, phoneError,
                         NhaMang: carrier
                     });
                 }
@@ -1227,12 +2162,9 @@
                 state.vaccine.data = processed;
                 renderVaccineTable();
                 
-                let msg = `✅ Đã tải ${processed.length} dòng dữ liệu vaccine.`;
-                if (errorCount > 0) {
-                    msg += ` ⚠️ ${errorCount} số bị lỗi (độ dài > 11)!`;
-                }
+                let msg = `Đã tải ${processed.length} dòng dữ liệu vaccine`;
+                if (errorCount > 0) msg += ` · ${errorCount} số lỗi`;
                 showToast(msg, 'success');
-                document.getElementById('badgeVaccine').textContent = processed.length;
                 updateVaccineButtons();
                 
             } catch (err) {
@@ -1242,13 +2174,11 @@
         reader.readAsArrayBuffer(file);
     }
 
-    // ---------- PROCESS VACCINE ----------
     function processVaccine() {
         const data = state.vaccine.data;
-        if (!data.length) { showToast('Không có dữ liệu.', 'error'); return; }
+        if (!data.length) { showToast('Không có dữ liệu', 'error'); return; }
         
-        let fixed = 0;
-        let errorCount = 0;
+        let fixed = 0, errorCount = 0;
         for (let row of data) {
             if (row.SoDT) {
                 const result = formatPhone(row.SoDT);
@@ -1269,26 +2199,21 @@
             }
         }
         renderVaccineTable();
-        let msg = `Đã xử lý ${fixed} số điện thoại.`;
-        if (errorCount > 0) {
-            msg += ` ⚠️ ${errorCount} số bị lỗi (độ dài > 11)!`;
-        }
+        let msg = `Đã xử lý ${fixed} số điện thoại`;
+        if (errorCount > 0) msg += ` · ${errorCount} số lỗi`;
         showToast(msg, 'success');
     }
 
-    // ---------- EXPORT ZIP VACCINE ----------
     function exportZipVaccine() {
         const validData = state.vaccine.data.filter(r => r.phoneStatus === 'valid' && r.SoDT);
         const errorData = state.vaccine.data.filter(r => r.phoneError && r.SoDT);
         
         if (!validData.length && !errorData.length) {
-            showToast('Không có số điện thoại để xuất.', 'error');
+            showToast('Không có số điện thoại để xuất', 'error');
             return;
         }
         
         state.vaccine.downloadCount += 1;
-        const count = state.vaccine.downloadCount;
-        
         const groups = {};
         
         for (let row of validData) {
@@ -1323,56 +2248,54 @@
                 const ws = XLSX.utils.json_to_sheet(items);
                 ws['!cols'] = [{ wch: 15 }, { wch: 30 }, { wch: 50 }, { wch: 15 }];
                 XLSX.utils.book_append_sheet(wb, ws, 'Sheet');
-                zip.file(getNetworkFilename(network, count), XLSX.write(wb, { bookType: 'xlsx', type: 'array' }));
+                zip.file(getNetworkFilename(network), XLSX.write(wb, { bookType: 'xlsx', type: 'array' }));
                 fileCount++;
             }
             zip.generateAsync({ type: 'blob', compression: 'DEFLATE' })
-                .then(c => { saveAs(c, `Vaccine_Export.zip`);
-                    let msg = `✅ Đã xuất ZIP với ${fileCount} file!`;
-                    if (errorData.length > 0) {
-                        msg += ` ⚠️ ${errorData.length} số lỗi (12 số) đã xuất vào Khac.xlsx!`;
-                    }
-                    showToast(msg, 'success'); })
+                .then(c => { 
+                    saveAs(c, `Vaccine_Export.zip`);
+                    showToast(`Đã xuất ZIP với ${fileCount} file`, 'success');
+                })
                 .catch(() => showToast('Lỗi tạo ZIP', 'error'));
         } catch (e) { showToast('Lỗi: ' + e.message, 'error'); }
     }
 
-    // =============================================
-    // UPDATE FUNCTIONS
-    // =============================================
+    function clearDataVaccine() {
+        if (!state.vaccine.data.length) return;
+        if (!confirm('Bạn có chắc chắn muốn xóa tất cả dữ liệu?')) return;
+        state.vaccine.data = [];
+        state.vaccine.fileName = '';
+        document.getElementById('fileName2').innerHTML = '';
+        renderVaccineTable();
+        updateVaccineButtons();
+        showToast('Đã xóa dữ liệu', 'info');
+    }
 
+    // ===== UPDATE =====
     function updateStats() {
         const data = state.link.data;
-        const total = data.length;
-        const shortened = data.filter(r => r.status === 'done').length;
-        const validPhones = data.filter(r => r.phoneStatus === 'valid').length;
-        const warningPhones = data.filter(r => r.phoneStatus === 'error' || r.phoneStatus === 'invalid').length;
-        
-        document.getElementById('statShortened').textContent = shortened;
-        document.getElementById('statValidPhones').textContent = validPhones;
-        document.getElementById('statWarningPhones').textContent = warningPhones;
-        document.getElementById('statTotal').textContent = total;
+        document.getElementById('statShortened').textContent = data.filter(r => r.status === 'done').length;
+        document.getElementById('statValidPhones').textContent = data.filter(r => r.phoneStatus === 'valid').length;
+        document.getElementById('statWarningPhones').textContent = data.filter(r => r.phoneStatus === 'error' || r.phoneStatus === 'invalid').length;
+        document.getElementById('statTotal').textContent = data.length;
     }
 
     function updateButtons() {
         const hasData = state.link.data.length > 0;
-        const hasValid = state.link.data.some(r => r.phoneStatus === 'valid' && r.linkRutGon);
         document.getElementById('btnShortenAll').disabled = !hasData || state.link.isProcessing;
         document.getElementById('btnFixPhone').disabled = !hasData || state.link.isProcessing;
         document.getElementById('btnExportZip').disabled = !hasData || state.link.isProcessing;
-        document.getElementById('btnExportExcel').disabled = !hasData || state.link.isProcessing;
+        document.getElementById('btnClearData1').disabled = !hasData;
     }
 
     function updateVaccineButtons() {
         const hasData = state.vaccine.data.length > 0;
         document.getElementById('btnProcess2').disabled = !hasData;
         document.getElementById('btnExportZip2').disabled = !hasData;
+        document.getElementById('btnClearData2').disabled = !hasData;
     }
 
-    // =============================================
-    // SETUP FILE UPLOAD
-    // =============================================
-
+    // ===== FILE UPLOAD =====
     function setupFileUpload(dropZoneId, fileInputId, loadFn) {
         const dropZone = document.getElementById(dropZoneId);
         const fileInput = document.getElementById(fileInputId);
@@ -1391,16 +2314,13 @@
             this.classList.remove('dragover');
             if (e.dataTransfer.files.length) loadFn(e.dataTransfer.files[0]);
         });
-        fileInput.addEventListener('change', function(e) {
+        fileInput.addEventListener('change', function() {
             if (this.files.length) loadFn(this.files[0]);
             this.value = '';
         });
     }
 
-    // =============================================
-    // INIT
-    // =============================================
-
+    // ===== INIT =====
     function init() {
         setupFileUpload('dropZone1', 'fileInput1', loadLinkFile);
         setupFileUpload('dropZone2', 'fileInput2', loadVaccineFile);
@@ -1408,22 +2328,28 @@
         document.getElementById('btnShortenAll').addEventListener('click', shortenAll);
         document.getElementById('btnFixPhone').addEventListener('click', fixPhones);
         document.getElementById('btnExportZip').addEventListener('click', exportZipLink);
-        document.getElementById('btnExportExcel').addEventListener('click', exportExcelLink);
+        document.getElementById('btnClearData1').addEventListener('click', clearDataLink);
         
         document.getElementById('btnProcess2').addEventListener('click', processVaccine);
         document.getElementById('btnExportZip2').addEventListener('click', exportZipVaccine);
-        document.getElementById('btnSendSms').href = 'https://ads-new.vinaphone.com.vn/Agent/Login.aspx';
+        document.getElementById('btnClearData2').addEventListener('click', clearDataVaccine);
+        
+        document.getElementById('btnSendSms').addEventListener('click', function(e) {
+            const data = state.vaccine.data;
+            if (!data.length) {
+                e.preventDefault();
+                showToast('Chưa có dữ liệu để gửi. Vui lòng tải file vaccine trước.', 'error');
+                return;
+            }
+            this.href = `https://ads-new.vinaphone.com.vn/Agent/Login.aspx`;
+        });
         
         renderLinkTable();
         renderVaccineTable();
         updateButtons();
         updateVaccineButtons();
         
-        console.log('🏥 Hệ thống SMS Bệnh viện đã sẵn sàng!');
-        console.log('🔗 Tab 1: Rút gọn link Google Drive');
-        console.log('💉 Tab 2: Xử lý danh sách tiêm chủng');
-        console.log('📌 Màu sắc nhà mạng: VinaPhone - Xanh biển đậm | Viettel - Đỏ | Vietnamobile - Vàng | MobiFone - Xanh biển nhạt | Khác - Đen');
-        console.log('⚠️ Số điện thoại có độ dài > 11 sẽ được bôi đỏ, hiển thị dấu ! và xuất vào Khac.xlsx');
+        console.log('🏥 Hệ thống SMS Bệnh viện Đa khoa Ninh Thuận đã sẵn sàng!');
     }
 
     if (document.readyState === 'loading') {
