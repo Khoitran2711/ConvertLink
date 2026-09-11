@@ -1057,6 +1057,121 @@
             transform: translateX(2px);
         }
 
+        /* ===== FILTER BAR ===== */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 16px;
+            padding: 14px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            flex-wrap: wrap;
+        }
+
+        .filter-bar-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            padding-right: 8px;
+            border-right: 1px solid var(--border-strong);
+            margin-right: 4px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .filter-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .filter-input,
+        .filter-select {
+            flex: 1;
+            min-width: 0;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .filter-input:focus,
+        .filter-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-bg);
+        }
+
+        .filter-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .filter-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
+        }
+
+        .filter-clear {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .filter-clear:hover {
+            background: var(--red-bg);
+            color: var(--red);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .filter-result {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            white-space: nowrap;
+            margin-left: auto;
+        }
+
+        .filter-result strong {
+            color: var(--primary);
+        }
+
         /* ===== EMPTY STATE ===== */
         .empty {
             text-align: center;
@@ -1247,6 +1362,19 @@
             .table-header { flex-direction: column; align-items: flex-start; }
             .toast-wrap { left: 16px; right: 16px; bottom: 16px; }
             .toast { min-width: auto; max-width: none; }
+            .filter-bar { padding: 12px; }
+            .filter-bar-label {
+                border-right: none;
+                padding-right: 0;
+                margin-right: 0;
+                width: 100%;
+            }
+            .filter-group { min-width: 100%; }
+            .filter-result {
+                margin-left: 0;
+                width: 100%;
+                text-align: center;
+            }
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -1402,6 +1530,41 @@
                 </div>
             </div>
 
+            <!-- Filter Bar Tab 1 -->
+            <div class="filter-bar" id="filterBar1">
+                <div class="filter-bar-label">🔍 Bộ lọc</div>
+                <div class="filter-group">
+                    <label>Họ tên</label>
+                    <input type="text" class="filter-input" id="filterName1" placeholder="Tìm theo tên...">
+                </div>
+                <div class="filter-group">
+                    <label>SĐT</label>
+                    <input type="text" class="filter-input" id="filterPhone1" placeholder="Tìm theo SĐT...">
+                </div>
+                <div class="filter-group">
+                    <label>Nhà mạng</label>
+                    <select class="filter-select" id="filterCarrier1">
+                        <option value="">Tất cả</option>
+                        <option value="Viettel">Viettel</option>
+                        <option value="VinaPhone">VinaPhone</option>
+                        <option value="MobiFone">MobiFone</option>
+                        <option value="Vietnamobile">Vietnamobile</option>
+                        <option value="Khac">Khác</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Link</label>
+                    <select class="filter-select" id="filterLink1">
+                        <option value="">Tất cả</option>
+                        <option value="done">Đã rút gọn</option>
+                        <option value="ready">Chưa rút gọn</option>
+                        <option value="error">Lỗi</option>
+                    </select>
+                </div>
+                <button class="filter-clear" id="filterClear1">✕ Xóa lọc</button>
+                <div class="filter-result" id="filterResult1">Hiển thị <strong>0</strong> / 0</div>
+            </div>
+
             <div class="table-container">
                 <div class="table-scroll">
                     <table>
@@ -1471,6 +1634,40 @@
                 </div>
             </div>
 
+            <!-- Filter Bar Tab 2 -->
+            <div class="filter-bar" id="filterBar2">
+                <div class="filter-bar-label">🔍 Bộ lọc</div>
+                <div class="filter-group">
+                    <label>SĐT</label>
+                    <input type="text" class="filter-input" id="filterPhone2" placeholder="Tìm theo SĐT...">
+                </div>
+                <div class="filter-group">
+                    <label>Họ tên</label>
+                    <input type="text" class="filter-input" id="filterName2" placeholder="Tìm theo tên...">
+                </div>
+                <div class="filter-group">
+                    <label>Nhà mạng</label>
+                    <select class="filter-select" id="filterCarrier2">
+                        <option value="">Tất cả</option>
+                        <option value="Viettel">Viettel</option>
+                        <option value="VinaPhone">VinaPhone</option>
+                        <option value="MobiFone">MobiFone</option>
+                        <option value="Vietnamobile">Vietnamobile</option>
+                        <option value="Khac">Khác</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>VACXIN</label>
+                    <input type="text" class="filter-input" id="filterVaccine2" placeholder="Tìm theo vắc xin...">
+                </div>
+                <div class="filter-group">
+                    <label>Ngày tái khám</label>
+                    <input type="text" class="filter-input" id="filterDate2" placeholder="Tìm theo ngày...">
+                </div>
+                <button class="filter-clear" id="filterClear2">✕ Xóa lọc</button>
+                <div class="filter-result" id="filterResult2">Hiển thị <strong>0</strong> / 0</div>
+            </div>
+
             <div class="table-container">
                 <div class="table-scroll">
                     <table>
@@ -1527,8 +1724,18 @@
 
     // ===== STATE =====
     const state = {
-        link: { data: [], fileName: '', isProcessing: false },
-        vaccine: { data: [], fileName: '', downloadCount: 0 }
+        link: { 
+            data: [], 
+            fileName: '', 
+            isProcessing: false, 
+            filter: { name: '', phone: '', carrier: '', link: '' } 
+        },
+        vaccine: { 
+            data: [], 
+            fileName: '', 
+            downloadCount: 0, 
+            filter: { phone: '', name: '', carrier: '', vaccine: '', date: '' } 
+        }
     };
 
     // ===== TOAST =====
@@ -1665,25 +1872,25 @@
     }
 
     // ===== GET NETWORK =====
-    function getNetwork(phone) {
-        if (!phone || phone.length < 5) return 'Khac';
-        let p = String(phone).replace(/[^0-9]/g, '');
-        if (p.length === 12) return 'Khac';
-        if (p.startsWith('0')) p = '84' + p.substring(1);
-        if (!p.startsWith('84')) p = '84' + p;
-        let pre = p.substring(0, 4);
-        
-        const viettel = ['8432','8433','8434','8435','8436','8437','8438','8439','8486','8496','8497','8498'];
-        const vinaphone = ['8481','8482','8483','8484','8485','8488','8491','8494'];
-        const mobifone = ['8470','8476','8477','8478','8479','8489','8493','8490'];
-        const vietnamobile = ['8452','8456','8458','8492'];
-        
-        if (viettel.includes(pre)) return 'Viettel';
-        if (vinaphone.includes(pre)) return 'VinaPhone';
-        if (mobifone.includes(pre)) return 'MobiFone';
-        if (vietnamobile.includes(pre)) return 'Vietnamobile';
-        return 'Khac';
-    }
+	function getNetwork(phone) {
+		if (!phone || phone.length < 5) return 'Khac';
+		let p = String(phone).replace(/[^0-9]/g, '');
+		if (p.length === 12) return 'Khac';
+		if (p.startsWith('0')) p = '84' + p.substring(1);
+		if (!p.startsWith('84')) p = '84' + p;
+		let pre = p.substring(0, 4);
+		
+		const viettel = ['8432','8433','8434','8435','8436','8437','8438','8439','8486','8496','8497','8498'];
+		const vinaphone = ['8481','8482','8483','8484','8485','8488','8491','8494'];
+		const mobifone = ['8470','8476','8477','8478','8479','8489','8493','8490'];
+		const vietnamobile = ['8452','8456','8458','8492'];
+		
+		if (viettel.includes(pre)) return 'Viettel';
+		if (vinaphone.includes(pre)) return 'VinaPhone';
+		if (mobifone.includes(pre)) return 'MobiFone';
+		if (vietnamobile.includes(pre)) return 'Vietnamobile';
+		return 'Khac';
+	}
 
     function getCarrierClass(carrier) {
         const map = {
@@ -1714,9 +1921,74 @@
         return `${base}.xlsx`;
     }
 
+    // ===== FILTER HELPERS =====
+    function getFilteredLinkData() {
+        const f = state.link.filter;
+        const nameKey = removeAccents(f.name.toLowerCase().trim());
+        const phoneKey = f.phone.replace(/\D/g, '').trim();
+        
+        return state.link.data.filter(row => {
+            if (nameKey) {
+                const rowName = removeAccents(String(row.HoTen || '').toLowerCase());
+                if (!rowName.includes(nameKey)) return false;
+            }
+            if (phoneKey) {
+                const rowPhone = String(row.SoDT || '').replace(/\D/g, '');
+                if (!rowPhone.includes(phoneKey)) return false;
+            }
+            if (f.carrier && row.NhaMang !== f.carrier) return false;
+            if (f.link) {
+                if (f.link === 'done' && row.status !== 'done') return false;
+                if (f.link === 'ready' && row.status !== 'ready') return false;
+                if (f.link === 'error' && row.status !== 'error') return false;
+            }
+            return true;
+        });
+    }
+
+    function getFilteredVaccineData() {
+        const f = state.vaccine.filter;
+        const phoneKey = f.phone.replace(/\D/g, '').trim();
+        const nameKey = removeAccents(f.name.toLowerCase().trim());
+        const vaccineKey = removeAccents(f.vaccine.toLowerCase().trim());
+        const dateKey = f.date.toLowerCase().trim();
+        
+        return state.vaccine.data.filter(row => {
+            if (phoneKey) {
+                const rowPhone = String(row.SoDT || '').replace(/\D/g, '');
+                if (!rowPhone.includes(phoneKey)) return false;
+            }
+            if (nameKey) {
+                const rowName = removeAccents(String(row.ho_ten || '').toLowerCase());
+                if (!rowName.includes(nameKey)) return false;
+            }
+            if (f.carrier && row.NhaMang !== f.carrier) return false;
+            if (vaccineKey) {
+                const rowVaccine = removeAccents(String(row.VACXIN || '').toLowerCase());
+                if (!rowVaccine.includes(vaccineKey)) return false;
+            }
+            if (dateKey) {
+                const rowDate = String(row.NGAYTAIKHAM || '').toLowerCase();
+                if (!rowDate.includes(dateKey)) return false;
+            }
+            return true;
+        });
+    }
+
+    function updateFilterResult1(shown, total) {
+        const el = document.getElementById('filterResult1');
+        if (el) el.innerHTML = `Hiển thị <strong>${shown}</strong> / ${total}`;
+    }
+
+    function updateFilterResult2(shown, total) {
+        const el = document.getElementById('filterResult2');
+        if (el) el.innerHTML = `Hiển thị <strong>${shown}</strong> / ${total}`;
+    }
+
     // ===== RENDER LINK TABLE =====
     function renderLinkTable() {
         const data = state.link.data;
+        const filtered = getFilteredLinkData();
         const tbody = document.getElementById('tableBody1');
         const progress = document.getElementById('progress1');
         const progressText = document.getElementById('progressText1');
@@ -1733,12 +2005,27 @@
             updateLinkTableInfo();
             progress.style.width = '0%';
             progressText.textContent = '0%';
+            updateFilterResult1(0, 0);
+            return;
+        }
+
+        if (!filtered.length) {
+            tbody.innerHTML = `<tr><td colspan="5">
+                <div class="empty">
+                    <div class="empty-icon">🔍</div>
+                    <div class="empty-title">Không tìm thấy kết quả</div>
+                    <div class="empty-text">Thử điều chỉnh bộ lọc của bạn</div>
+                </div>
+            </td></tr>`;
+            updateStats();
+            updateLinkTableInfo();
+            updateFilterResult1(0, data.length);
             return;
         }
 
         let html = '';
         let rowNum = 1;
-        for (let row of data) {
+        for (let row of filtered) {
             let statusBadge = '';
             if (row.status === 'ready') statusBadge = `<span class="status status-ready">Sẵn sàng</span>`;
             else if (row.status === 'processing') statusBadge = `<span class="status status-processing">Đang rút</span>`;
@@ -1785,6 +2072,7 @@
         
         updateStats();
         updateLinkTableInfo();
+        updateFilterResult1(filtered.length, total);
     }
 
     function updateLinkTableInfo() {
@@ -2026,7 +2314,12 @@
         if (!confirm('Bạn có chắc chắn muốn xóa tất cả dữ liệu?')) return;
         state.link.data = [];
         state.link.fileName = '';
+        state.link.filter = { name: '', phone: '', carrier: '', link: '' };
         document.getElementById('fileName1').innerHTML = '';
+        document.getElementById('filterName1').value = '';
+        document.getElementById('filterPhone1').value = '';
+        document.getElementById('filterCarrier1').value = '';
+        document.getElementById('filterLink1').value = '';
         renderLinkTable();
         updateButtons();
         showToast('Đã xóa dữ liệu', 'info');
@@ -2035,6 +2328,7 @@
     // ===== VACCINE =====
     function renderVaccineTable() {
         const data = state.vaccine.data;
+        const filtered = getFilteredVaccineData();
         const tbody = document.getElementById('tableBody2');
         
         if (!data.length) {
@@ -2046,12 +2340,26 @@
                 </div>
             </td></tr>`;
             updateVaccineTableInfo();
+            updateFilterResult2(0, 0);
+            return;
+        }
+
+        if (!filtered.length) {
+            tbody.innerHTML = `<tr><td colspan="6">
+                <div class="empty">
+                    <div class="empty-icon">🔍</div>
+                    <div class="empty-title">Không tìm thấy kết quả</div>
+                    <div class="empty-text">Thử điều chỉnh bộ lọc của bạn</div>
+                </div>
+            </td></tr>`;
+            updateVaccineTableInfo();
+            updateFilterResult2(0, data.length);
             return;
         }
 
         let html = '';
         let rowNum = 1;
-        for (let row of data) {
+        for (let row of filtered) {
             let phoneDisplay = '';
             if (row.SoDT) {
                 if (row.phoneError) phoneDisplay = `<span class="phone phone-error">${escapeHtml(row.SoDT)}</span>`;
@@ -2080,6 +2388,7 @@
         }
         tbody.innerHTML = html;
         updateVaccineTableInfo();
+        updateFilterResult2(filtered.length, data.length);
     }
 
     function updateVaccineTableInfo() {
@@ -2265,7 +2574,13 @@
         if (!confirm('Bạn có chắc chắn muốn xóa tất cả dữ liệu?')) return;
         state.vaccine.data = [];
         state.vaccine.fileName = '';
+        state.vaccine.filter = { phone: '', name: '', carrier: '', vaccine: '', date: '' };
         document.getElementById('fileName2').innerHTML = '';
+        document.getElementById('filterPhone2').value = '';
+        document.getElementById('filterName2').value = '';
+        document.getElementById('filterCarrier2').value = '';
+        document.getElementById('filterVaccine2').value = '';
+        document.getElementById('filterDate2').value = '';
         renderVaccineTable();
         updateVaccineButtons();
         showToast('Đã xóa dữ liệu', 'info');
@@ -2320,10 +2635,71 @@
         });
     }
 
+    // ===== FILTER EVENTS =====
+    function setupFilterEvents() {
+        // Tab 1
+        document.getElementById('filterName1').addEventListener('input', function() {
+            state.link.filter.name = this.value;
+            renderLinkTable();
+        });
+        document.getElementById('filterPhone1').addEventListener('input', function() {
+            state.link.filter.phone = this.value;
+            renderLinkTable();
+        });
+        document.getElementById('filterCarrier1').addEventListener('change', function() {
+            state.link.filter.carrier = this.value;
+            renderLinkTable();
+        });
+        document.getElementById('filterLink1').addEventListener('change', function() {
+            state.link.filter.link = this.value;
+            renderLinkTable();
+        });
+        document.getElementById('filterClear1').addEventListener('click', function() {
+            state.link.filter = { name: '', phone: '', carrier: '', link: '' };
+            document.getElementById('filterName1').value = '';
+            document.getElementById('filterPhone1').value = '';
+            document.getElementById('filterCarrier1').value = '';
+            document.getElementById('filterLink1').value = '';
+            renderLinkTable();
+        });
+
+        // Tab 2
+        document.getElementById('filterPhone2').addEventListener('input', function() {
+            state.vaccine.filter.phone = this.value;
+            renderVaccineTable();
+        });
+        document.getElementById('filterName2').addEventListener('input', function() {
+            state.vaccine.filter.name = this.value;
+            renderVaccineTable();
+        });
+        document.getElementById('filterCarrier2').addEventListener('change', function() {
+            state.vaccine.filter.carrier = this.value;
+            renderVaccineTable();
+        });
+        document.getElementById('filterVaccine2').addEventListener('input', function() {
+            state.vaccine.filter.vaccine = this.value;
+            renderVaccineTable();
+        });
+        document.getElementById('filterDate2').addEventListener('input', function() {
+            state.vaccine.filter.date = this.value;
+            renderVaccineTable();
+        });
+        document.getElementById('filterClear2').addEventListener('click', function() {
+            state.vaccine.filter = { phone: '', name: '', carrier: '', vaccine: '', date: '' };
+            document.getElementById('filterPhone2').value = '';
+            document.getElementById('filterName2').value = '';
+            document.getElementById('filterCarrier2').value = '';
+            document.getElementById('filterVaccine2').value = '';
+            document.getElementById('filterDate2').value = '';
+            renderVaccineTable();
+        });
+    }
+
     // ===== INIT =====
     function init() {
         setupFileUpload('dropZone1', 'fileInput1', loadLinkFile);
         setupFileUpload('dropZone2', 'fileInput2', loadVaccineFile);
+        setupFilterEvents();
         
         document.getElementById('btnShortenAll').addEventListener('click', shortenAll);
         document.getElementById('btnFixPhone').addEventListener('click', fixPhones);
