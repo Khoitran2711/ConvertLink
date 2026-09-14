@@ -109,43 +109,49 @@
         .app {
             position: relative;
             z-index: 1;
-            display: grid;
-            grid-template-columns: 260px 1fr;
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
         }
 
-        /* ===== SIDEBAR ===== */
-        .sidebar {
+        /* ===== TOP HEADER ===== */
+        .top-header {
             background: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            height: 100vh;
-            overflow-y: auto;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 12px 32px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            flex-wrap: wrap;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 8px 12px 20px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 12px;
+            flex-shrink: 0;
         }
 
         .brand-icon {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: var(--radius-md);
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
             flex-shrink: 0;
         }
@@ -153,12 +159,12 @@
         .brand-text {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 0;
             min-width: 0;
         }
 
         .brand-title {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.2;
@@ -173,27 +179,22 @@
             letter-spacing: 0.05em;
         }
 
-        .nav-section {
+        /* ===== HORIZONTAL TABS ===== */
+        .tabs-nav {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 4px;
-            margin-bottom: 8px;
-        }
-
-        .nav-label {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            padding: 8px 12px 4px;
+            flex: 1;
+            justify-content: center;
+            min-width: 0;
+            flex-wrap: wrap;
         }
 
         .nav-btn {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 11px 12px;
+            gap: 8px;
+            padding: 10px 18px;
             border-radius: var(--radius-md);
             border: none;
             background: transparent;
@@ -203,23 +204,8 @@
             font-family: inherit;
             cursor: pointer;
             transition: all 0.2s ease;
-            text-align: left;
-            width: 100%;
             position: relative;
-            overflow: hidden;
-        }
-
-        .nav-btn::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 0;
-            background: var(--primary);
-            border-radius: 0 4px 4px 0;
-            transition: height 0.25s ease;
+            white-space: nowrap;
         }
 
         .nav-btn:hover {
@@ -232,8 +218,15 @@
             color: var(--primary);
         }
 
-        .nav-btn.active::before {
-            height: 24px;
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 16px;
+            right: 16px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
         }
 
         .nav-icon {
@@ -247,7 +240,6 @@
         }
 
         .nav-badge {
-            margin-left: auto;
             font-size: 10px;
             font-weight: 700;
             padding: 2px 8px;
@@ -262,20 +254,19 @@
             color: #fff;
         }
 
-        .sidebar-footer {
-            margin-top: auto;
-            padding-top: 16px;
-            border-top: 1px solid var(--border-color);
+        /* ===== HEADER ACTIONS ===== */
+        .header-actions {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
         }
 
         .theme-toggle {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
+            gap: 8px;
+            padding: 8px 14px;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
             background: var(--bg-tertiary);
@@ -285,7 +276,6 @@
             font-family: inherit;
             cursor: pointer;
             transition: all 0.2s ease;
-            width: 100%;
         }
 
         .theme-toggle:hover {
@@ -311,6 +301,7 @@
             font-size: 11px;
             color: var(--text-muted);
             font-weight: 500;
+            white-space: nowrap;
         }
 
         .status-dot {
@@ -339,9 +330,12 @@
 
         /* ===== MAIN ===== */
         .main {
-            padding: 32px 40px;
+            padding: 28px 40px 40px;
             max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
             overflow-x: hidden;
+            flex: 1;
         }
 
         /* ===== PAGE HEADER ===== */
@@ -350,7 +344,7 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 24px;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
         }
 
@@ -372,7 +366,7 @@
         }
 
         .page-title {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
             color: var(--text-primary);
             letter-spacing: -0.02em;
@@ -385,27 +379,37 @@
             max-width: 640px;
         }
 
-        /* ===== STATS ===== */
+        /* ===== STATS (COMPACT & HIGHLIGHT) ===== */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 28px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-xl);
-            padding: 20px;
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
-            box-shadow: var(--shadow-sm);
+            border: 1px solid transparent;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
         }
+
+        /* Màu nền và viền riêng cho từng loại ô */
+        .stat-card:nth-child(1) { background: linear-gradient(135deg, rgba(13, 148, 136, 0.06), rgba(13, 148, 136, 0.12)); border-color: rgba(13, 148, 136, 0.2); }
+        .stat-card:nth-child(2) { background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(59, 130, 246, 0.12)); border-color: rgba(59, 130, 246, 0.2); }
+        .stat-card:nth-child(3) { background: linear-gradient(135deg, rgba(239, 68, 68, 0.06), rgba(239, 68, 68, 0.12)); border-color: rgba(239, 68, 68, 0.2); }
+        .stat-card:nth-child(4) { background: linear-gradient(135deg, rgba(71, 85, 105, 0.06), rgba(71, 85, 105, 0.12)); border-color: rgba(71, 85, 105, 0.2); }
+
+        [data-theme="dark"] .stat-card:nth-child(1) { background: linear-gradient(135deg, rgba(13, 148, 136, 0.15), rgba(13, 148, 136, 0.25)); border-color: rgba(13, 148, 136, 0.4); }
+        [data-theme="dark"] .stat-card:nth-child(2) { background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.25)); border-color: rgba(59, 130, 246, 0.4); }
+        [data-theme="dark"] .stat-card:nth-child(3) { background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.25)); border-color: rgba(239, 68, 68, 0.4); }
+        [data-theme="dark"] .stat-card:nth-child(4) { background: linear-gradient(135deg, rgba(148, 163, 184, 0.15), rgba(148, 163, 184, 0.25)); border-color: rgba(148, 163, 184, 0.4); }
 
         .stat-card::before {
             content: '';
@@ -414,20 +418,19 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
+            background: currentColor;
+            opacity: 0.6;
         }
+
+        .stat-card:nth-child(1)::before { color: var(--primary); }
+        .stat-card:nth-child(2)::before { color: var(--blue); }
+        .stat-card:nth-child(3)::before { color: var(--red); }
+        .stat-card:nth-child(4)::before { color: var(--text-primary); }
 
         .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--border-strong);
-        }
-
-        .stat-card:hover::before {
-            transform: scaleX(1);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+            border-color: currentColor;
         }
 
         .stat-header {
@@ -437,53 +440,73 @@
         }
 
         .stat-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
         }
 
+        .stat-card:nth-child(1) .stat-label { color: var(--primary-dark); }
+        .stat-card:nth-child(2) .stat-label { color: var(--blue-dark); }
+        .stat-card:nth-child(3) .stat-label { color: var(--red-dark); }
+        .stat-card:nth-child(4) .stat-label { color: var(--text-primary); }
+
+        [data-theme="dark"] .stat-card:nth-child(1) .stat-label { color: var(--primary-light); }
+        [data-theme="dark"] .stat-card:nth-child(2) .stat-label { color: #60a5fa; }
+        [data-theme="dark"] .stat-card:nth-child(3) .stat-label { color: #f87171; }
+        [data-theme="dark"] .stat-card:nth-child(4) .stat-label { color: var(--text-primary); }
+
         .stat-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-md);
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 16px;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
             transition: transform 0.3s ease;
         }
 
         .stat-card:hover .stat-icon {
-            transform: scale(1.1) rotate(-5deg);
+            transform: scale(1.15) rotate(-8deg);
         }
 
-        .stat-icon.green { background: var(--primary-bg); color: var(--primary); }
-        .stat-icon.blue { background: var(--blue-bg); color: var(--blue); }
-        .stat-icon.red { background: var(--red-bg); color: var(--red); }
-        .stat-icon.dark { background: var(--bg-tertiary); color: var(--text-primary); }
+        .stat-icon.green { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+        .stat-icon.blue { background: linear-gradient(135deg, var(--blue), var(--blue-dark)); }
+        .stat-icon.red { background: linear-gradient(135deg, var(--red), var(--red-dark)); }
+        .stat-icon.dark { background: linear-gradient(135deg, #475569, #1e293b); }
 
         .stat-value {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
             line-height: 1;
             letter-spacing: -0.03em;
             font-variant-numeric: tabular-nums;
         }
 
-        .stat-value.green { color: var(--primary); }
-        .stat-value.blue { color: var(--blue); }
-        .stat-value.red { color: var(--red); }
+        .stat-value.green { color: var(--primary-dark); }
+        .stat-value.blue { color: var(--blue-dark); }
+        .stat-value.red { color: var(--red-dark); }
         .stat-value.dark { color: var(--text-primary); }
+
+        [data-theme="dark"] .stat-value.green { color: var(--primary-light); }
+        [data-theme="dark"] .stat-value.blue { color: #60a5fa; }
+        [data-theme="dark"] .stat-value.red { color: #f87171; }
 
         .stat-footer {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            opacity: 0.9;
         }
 
         /* ===== CONTENT CARD ===== */
@@ -1057,121 +1080,6 @@
             transform: translateX(2px);
         }
 
-        /* ===== FILTER BAR ===== */
-        .filter-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 0 0 16px;
-            padding: 14px 16px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            flex-wrap: wrap;
-        }
-
-        .filter-bar-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            padding-right: 8px;
-            border-right: 1px solid var(--border-strong);
-            margin-right: 4px;
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            min-width: 160px;
-        }
-
-        .filter-group label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            white-space: nowrap;
-        }
-
-        .filter-input,
-        .filter-select {
-            flex: 1;
-            min-width: 0;
-            padding: 8px 12px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            outline: none;
-        }
-
-        .filter-input:focus,
-        .filter-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-bg);
-        }
-
-        .filter-input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .filter-select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            padding-right: 30px;
-        }
-
-        .filter-clear {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .filter-clear:hover {
-            background: var(--red-bg);
-            color: var(--red);
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-
-        .filter-result {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: var(--bg-secondary);
-            white-space: nowrap;
-            margin-left: auto;
-        }
-
-        .filter-result strong {
-            color: var(--primary);
-        }
-
         /* ===== EMPTY STATE ===== */
         .empty {
             text-align: center;
@@ -1272,108 +1180,84 @@
             color: var(--text-secondary);
         }
 
-        /* ===== MOBILE ===== */
-        .mobile-header {
-            display: none;
-        }
-
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
-            .app {
-                grid-template-columns: 1fr;
+            .header-inner {
+                padding: 12px 20px;
             }
-
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                width: 280px;
-                z-index: 100;
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-                box-shadow: var(--shadow-xl);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .mobile-header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 16px 20px;
-                background: var(--bg-secondary);
-                border-bottom: 1px solid var(--border-color);
-                position: sticky;
-                top: 0;
-                z-index: 50;
-            }
-
-            .mobile-brand {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-size: 14px;
-                font-weight: 700;
-            }
-
-            .mobile-toggle {
-                width: 40px;
-                height: 40px;
-                border-radius: var(--radius-md);
-                border: 1px solid var(--border-color);
-                background: var(--bg-tertiary);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                font-size: 18px;
-                color: var(--text-primary);
-            }
-
             .main {
                 padding: 20px;
             }
-
-            .overlay {
-                position: fixed;
-                inset: 0;
-                background: rgba(15, 23, 42, 0.5);
-                backdrop-filter: blur(4px);
-                z-index: 99;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.3s ease;
+            .tabs-nav {
+                order: 3;
+                width: 100%;
+                justify-content: flex-start;
+                margin-top: 4px;
             }
-
-            .overlay.show {
-                opacity: 1;
-                pointer-events: auto;
+            .nav-btn.active::after {
+                bottom: -8px;
             }
         }
 
-        @media (max-width: 640px) {
-            .main { padding: 16px; }
-            .page-title { font-size: 20px; }
-            .stat-value { font-size: 26px; }
-            .content-card { padding: 20px; }
-            .action-grid { grid-template-columns: 1fr; }
-            .table-header { flex-direction: column; align-items: flex-start; }
-            .toast-wrap { left: 16px; right: 16px; bottom: 16px; }
-            .toast { min-width: auto; max-width: none; }
-            .filter-bar { padding: 12px; }
-            .filter-bar-label {
-                border-right: none;
-                padding-right: 0;
-                margin-right: 0;
-                width: 100%;
+        @media (max-width: 768px) {
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
             }
-            .filter-group { min-width: 100%; }
-            .filter-result {
-                margin-left: 0;
+            .tabs-nav {
                 width: 100%;
-                text-align: center;
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 4px;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .nav-btn {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+            .page-title {
+                font-size: 20px;
+            }
+            .stat-value {
+                font-size: 22px;
+            }
+            .stats-grid {
+                gap: 8px;
+            }
+            .stat-card {
+                padding: 10px 12px;
+            }
+            .stat-label, .stat-footer {
+                font-size: 9px;
+            }
+            .stat-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+            }
+            .content-card {
+                padding: 20px;
+            }
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .toast-wrap {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+            }
+            .toast {
+                min-width: auto;
+                max-width: none;
             }
         }
 
@@ -1385,53 +1269,43 @@
 </head>
 <body>
 
-<!-- Mobile Header -->
-<div class="mobile-header">
-    <div class="mobile-brand">
-        <span>🏥</span>
-        <span>SMS Bệnh viện</span>
-    </div>
-    <button class="mobile-toggle" id="mobileToggle">☰</button>
-</div>
-
-<div class="overlay" id="overlay"></div>
-
 <div class="app">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="brand">
-            <div class="brand-icon">🏥</div>
-            <div class="brand-text">
-                <div class="brand-title">Bệnh viện Đa khoa</div>
-                <div class="brand-subtitle">Ninh Thuận</div>
+    <!-- Top Header with Horizontal Tabs -->
+    <header class="top-header">
+        <div class="header-inner">
+            <div class="brand">
+                <div class="brand-icon">🏥</div>
+                <div class="brand-text">
+                    <div class="brand-title">Bệnh viện Đa khoa</div>
+                    <div class="brand-subtitle">Ninh Thuận</div>
+                </div>
+            </div>
+
+            <nav class="tabs-nav" id="tabsNav">
+                <button class="nav-btn active" data-tab="tab1">
+                    <span class="nav-icon">🔗</span>
+                    <span>Rút gọn link</span>
+                    <span class="nav-badge" id="badgeLink">0</span>
+                </button>
+                <button class="nav-btn" data-tab="tab2">
+                    <span class="nav-icon">💉</span>
+                    <span>Xử lý Vaccine</span>
+                    <span class="nav-badge" id="badgeVaccine">0</span>
+                </button>
+            </nav>
+
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <span class="theme-icon">🌙</span>
+                    <span>Chế độ tối</span>
+                </button>
+                <div class="system-status">
+                    <span class="status-dot"></span>
+                    <span>Hệ thống hoạt động</span>
+                </div>
             </div>
         </div>
-
-        <div class="nav-section">
-            <div class="nav-label">Chức năng</div>
-            <button class="nav-btn active" data-tab="tab1">
-                <span class="nav-icon">🔗</span>
-                <span>Rút gọn link</span>
-                <span class="nav-badge" id="badgeLink">0</span>
-            </button>
-            <button class="nav-btn" data-tab="tab2">
-                <span class="nav-icon">💉</span>
-                <span>Xử lý Vaccine</span>
-                <span class="nav-badge" id="badgeVaccine">0</span>
-            </button>
-        </div>
-
-        <div class="sidebar-footer">
-            <button class="theme-toggle" id="themeToggle">
-                <span class="theme-icon">🌙</span>
-                <span>Chế độ tối</span>
-            </button>
-            <div class="system-status">
-                <span class="status-dot"></span>
-                <span>Hệ thống hoạt động</span>
-            </div>
-        </div>
-    </aside>
+    </header>
 
     <!-- Main -->
     <main class="main">
@@ -1530,41 +1404,6 @@
                 </div>
             </div>
 
-            <!-- Filter Bar Tab 1 -->
-            <div class="filter-bar" id="filterBar1">
-                <div class="filter-bar-label">🔍 Bộ lọc</div>
-                <div class="filter-group">
-                    <label>Họ tên</label>
-                    <input type="text" class="filter-input" id="filterName1" placeholder="Tìm theo tên...">
-                </div>
-                <div class="filter-group">
-                    <label>SĐT</label>
-                    <input type="text" class="filter-input" id="filterPhone1" placeholder="Tìm theo SĐT...">
-                </div>
-                <div class="filter-group">
-                    <label>Nhà mạng</label>
-                    <select class="filter-select" id="filterCarrier1">
-                        <option value="">Tất cả</option>
-                        <option value="Viettel">Viettel</option>
-                        <option value="VinaPhone">VinaPhone</option>
-                        <option value="MobiFone">MobiFone</option>
-                        <option value="Vietnamobile">Vietnamobile</option>
-                        <option value="Khac">Khác</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Link</label>
-                    <select class="filter-select" id="filterLink1">
-                        <option value="">Tất cả</option>
-                        <option value="done">Đã rút gọn</option>
-                        <option value="ready">Chưa rút gọn</option>
-                        <option value="error">Lỗi</option>
-                    </select>
-                </div>
-                <button class="filter-clear" id="filterClear1">✕ Xóa lọc</button>
-                <div class="filter-result" id="filterResult1">Hiển thị <strong>0</strong> / 0</div>
-            </div>
-
             <div class="table-container">
                 <div class="table-scroll">
                     <table>
@@ -1634,40 +1473,6 @@
                 </div>
             </div>
 
-            <!-- Filter Bar Tab 2 -->
-            <div class="filter-bar" id="filterBar2">
-                <div class="filter-bar-label">🔍 Bộ lọc</div>
-                <div class="filter-group">
-                    <label>SĐT</label>
-                    <input type="text" class="filter-input" id="filterPhone2" placeholder="Tìm theo SĐT...">
-                </div>
-                <div class="filter-group">
-                    <label>Họ tên</label>
-                    <input type="text" class="filter-input" id="filterName2" placeholder="Tìm theo tên...">
-                </div>
-                <div class="filter-group">
-                    <label>Nhà mạng</label>
-                    <select class="filter-select" id="filterCarrier2">
-                        <option value="">Tất cả</option>
-                        <option value="Viettel">Viettel</option>
-                        <option value="VinaPhone">VinaPhone</option>
-                        <option value="MobiFone">MobiFone</option>
-                        <option value="Vietnamobile">Vietnamobile</option>
-                        <option value="Khac">Khác</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>VACXIN</label>
-                    <input type="text" class="filter-input" id="filterVaccine2" placeholder="Tìm theo vắc xin...">
-                </div>
-                <div class="filter-group">
-                    <label>Ngày tái khám</label>
-                    <input type="text" class="filter-input" id="filterDate2" placeholder="Tìm theo ngày...">
-                </div>
-                <button class="filter-clear" id="filterClear2">✕ Xóa lọc</button>
-                <div class="filter-result" id="filterResult2">Hiển thị <strong>0</strong> / 0</div>
-            </div>
-
             <div class="table-container">
                 <div class="table-scroll">
                     <table>
@@ -1724,18 +1529,8 @@
 
     // ===== STATE =====
     const state = {
-        link: { 
-            data: [], 
-            fileName: '', 
-            isProcessing: false, 
-            filter: { name: '', phone: '', carrier: '', link: '' } 
-        },
-        vaccine: { 
-            data: [], 
-            fileName: '', 
-            downloadCount: 0, 
-            filter: { phone: '', name: '', carrier: '', vaccine: '', date: '' } 
-        }
+        link: { data: [], fileName: '', isProcessing: false },
+        vaccine: { data: [], fileName: '', downloadCount: 0 }
     };
 
     // ===== TOAST =====
@@ -1794,23 +1589,10 @@
             subtitle.textContent = 'Tải báo cáo tiêm chủng để tạo danh sách nhắc lịch hẹn tái khám theo nhà mạng.';
             document.getElementById('statsGrid').style.display = 'none';
         }
-        
-        document.getElementById('sidebar').classList.remove('open');
-        document.getElementById('overlay').classList.remove('show');
     }
 
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-    });
-
-    // Mobile menu
-    document.getElementById('mobileToggle').addEventListener('click', () => {
-        document.getElementById('sidebar').classList.toggle('open');
-        document.getElementById('overlay').classList.toggle('show');
-    });
-    document.getElementById('overlay').addEventListener('click', () => {
-        document.getElementById('sidebar').classList.remove('open');
-        document.getElementById('overlay').classList.remove('show');
     });
 
     // Theme toggle
@@ -1872,25 +1654,25 @@
     }
 
     // ===== GET NETWORK =====
-	function getNetwork(phone) {
-		if (!phone || phone.length < 5) return 'Khac';
-		let p = String(phone).replace(/[^0-9]/g, '');
-		if (p.length === 12) return 'Khac';
-		if (p.startsWith('0')) p = '84' + p.substring(1);
-		if (!p.startsWith('84')) p = '84' + p;
-		let pre = p.substring(0, 4);
-		
-		const viettel = ['8432','8433','8434','8435','8436','8437','8438','8439','8486','8496','8497','8498'];
-		const vinaphone = ['8481','8482','8483','8484','8485','8488','8491','8494'];
-		const mobifone = ['8470','8476','8477','8478','8479','8489','8493','8490'];
-		const vietnamobile = ['8452','8456','8458','8492'];
-		
-		if (viettel.includes(pre)) return 'Viettel';
-		if (vinaphone.includes(pre)) return 'VinaPhone';
-		if (mobifone.includes(pre)) return 'MobiFone';
-		if (vietnamobile.includes(pre)) return 'Vietnamobile';
-		return 'Khac';
-	}
+    function getNetwork(phone) {
+        if (!phone || phone.length < 5) return 'Khac';
+        let p = String(phone).replace(/[^0-9]/g, '');
+        if (p.length === 12) return 'Khac';
+        if (p.startsWith('0')) p = '84' + p.substring(1);
+        if (!p.startsWith('84')) p = '84' + p;
+        let pre = p.substring(0, 4);
+        
+        const viettel = ['8432','8433','8434','8435','8436','8437','8438','8439','8486','8496','8497','8498'];
+        const vinaphone = ['8481','8482','8483','8484','8485','8488','8491','8494'];
+        const mobifone = ['8470','8476','8477','8478','8479','8489','8493','8490'];
+        const vietnamobile = ['8452','8456','8458','8492'];
+        
+        if (viettel.includes(pre)) return 'Viettel';
+        if (vinaphone.includes(pre)) return 'VinaPhone';
+        if (mobifone.includes(pre)) return 'MobiFone';
+        if (vietnamobile.includes(pre)) return 'Vietnamobile';
+        return 'Khac';
+    }
 
     function getCarrierClass(carrier) {
         const map = {
@@ -1921,74 +1703,9 @@
         return `${base}.xlsx`;
     }
 
-    // ===== FILTER HELPERS =====
-    function getFilteredLinkData() {
-        const f = state.link.filter;
-        const nameKey = removeAccents(f.name.toLowerCase().trim());
-        const phoneKey = f.phone.replace(/\D/g, '').trim();
-        
-        return state.link.data.filter(row => {
-            if (nameKey) {
-                const rowName = removeAccents(String(row.HoTen || '').toLowerCase());
-                if (!rowName.includes(nameKey)) return false;
-            }
-            if (phoneKey) {
-                const rowPhone = String(row.SoDT || '').replace(/\D/g, '');
-                if (!rowPhone.includes(phoneKey)) return false;
-            }
-            if (f.carrier && row.NhaMang !== f.carrier) return false;
-            if (f.link) {
-                if (f.link === 'done' && row.status !== 'done') return false;
-                if (f.link === 'ready' && row.status !== 'ready') return false;
-                if (f.link === 'error' && row.status !== 'error') return false;
-            }
-            return true;
-        });
-    }
-
-    function getFilteredVaccineData() {
-        const f = state.vaccine.filter;
-        const phoneKey = f.phone.replace(/\D/g, '').trim();
-        const nameKey = removeAccents(f.name.toLowerCase().trim());
-        const vaccineKey = removeAccents(f.vaccine.toLowerCase().trim());
-        const dateKey = f.date.toLowerCase().trim();
-        
-        return state.vaccine.data.filter(row => {
-            if (phoneKey) {
-                const rowPhone = String(row.SoDT || '').replace(/\D/g, '');
-                if (!rowPhone.includes(phoneKey)) return false;
-            }
-            if (nameKey) {
-                const rowName = removeAccents(String(row.ho_ten || '').toLowerCase());
-                if (!rowName.includes(nameKey)) return false;
-            }
-            if (f.carrier && row.NhaMang !== f.carrier) return false;
-            if (vaccineKey) {
-                const rowVaccine = removeAccents(String(row.VACXIN || '').toLowerCase());
-                if (!rowVaccine.includes(vaccineKey)) return false;
-            }
-            if (dateKey) {
-                const rowDate = String(row.NGAYTAIKHAM || '').toLowerCase();
-                if (!rowDate.includes(dateKey)) return false;
-            }
-            return true;
-        });
-    }
-
-    function updateFilterResult1(shown, total) {
-        const el = document.getElementById('filterResult1');
-        if (el) el.innerHTML = `Hiển thị <strong>${shown}</strong> / ${total}`;
-    }
-
-    function updateFilterResult2(shown, total) {
-        const el = document.getElementById('filterResult2');
-        if (el) el.innerHTML = `Hiển thị <strong>${shown}</strong> / ${total}`;
-    }
-
     // ===== RENDER LINK TABLE =====
     function renderLinkTable() {
         const data = state.link.data;
-        const filtered = getFilteredLinkData();
         const tbody = document.getElementById('tableBody1');
         const progress = document.getElementById('progress1');
         const progressText = document.getElementById('progressText1');
@@ -2005,27 +1722,12 @@
             updateLinkTableInfo();
             progress.style.width = '0%';
             progressText.textContent = '0%';
-            updateFilterResult1(0, 0);
-            return;
-        }
-
-        if (!filtered.length) {
-            tbody.innerHTML = `<tr><td colspan="5">
-                <div class="empty">
-                    <div class="empty-icon">🔍</div>
-                    <div class="empty-title">Không tìm thấy kết quả</div>
-                    <div class="empty-text">Thử điều chỉnh bộ lọc của bạn</div>
-                </div>
-            </td></tr>`;
-            updateStats();
-            updateLinkTableInfo();
-            updateFilterResult1(0, data.length);
             return;
         }
 
         let html = '';
         let rowNum = 1;
-        for (let row of filtered) {
+        for (let row of data) {
             let statusBadge = '';
             if (row.status === 'ready') statusBadge = `<span class="status status-ready">Sẵn sàng</span>`;
             else if (row.status === 'processing') statusBadge = `<span class="status status-processing">Đang rút</span>`;
@@ -2072,7 +1774,6 @@
         
         updateStats();
         updateLinkTableInfo();
-        updateFilterResult1(filtered.length, total);
     }
 
     function updateLinkTableInfo() {
@@ -2314,12 +2015,7 @@
         if (!confirm('Bạn có chắc chắn muốn xóa tất cả dữ liệu?')) return;
         state.link.data = [];
         state.link.fileName = '';
-        state.link.filter = { name: '', phone: '', carrier: '', link: '' };
         document.getElementById('fileName1').innerHTML = '';
-        document.getElementById('filterName1').value = '';
-        document.getElementById('filterPhone1').value = '';
-        document.getElementById('filterCarrier1').value = '';
-        document.getElementById('filterLink1').value = '';
         renderLinkTable();
         updateButtons();
         showToast('Đã xóa dữ liệu', 'info');
@@ -2328,7 +2024,6 @@
     // ===== VACCINE =====
     function renderVaccineTable() {
         const data = state.vaccine.data;
-        const filtered = getFilteredVaccineData();
         const tbody = document.getElementById('tableBody2');
         
         if (!data.length) {
@@ -2340,26 +2035,12 @@
                 </div>
             </td></tr>`;
             updateVaccineTableInfo();
-            updateFilterResult2(0, 0);
-            return;
-        }
-
-        if (!filtered.length) {
-            tbody.innerHTML = `<tr><td colspan="6">
-                <div class="empty">
-                    <div class="empty-icon">🔍</div>
-                    <div class="empty-title">Không tìm thấy kết quả</div>
-                    <div class="empty-text">Thử điều chỉnh bộ lọc của bạn</div>
-                </div>
-            </td></tr>`;
-            updateVaccineTableInfo();
-            updateFilterResult2(0, data.length);
             return;
         }
 
         let html = '';
         let rowNum = 1;
-        for (let row of filtered) {
+        for (let row of data) {
             let phoneDisplay = '';
             if (row.SoDT) {
                 if (row.phoneError) phoneDisplay = `<span class="phone phone-error">${escapeHtml(row.SoDT)}</span>`;
@@ -2388,7 +2069,6 @@
         }
         tbody.innerHTML = html;
         updateVaccineTableInfo();
-        updateFilterResult2(filtered.length, data.length);
     }
 
     function updateVaccineTableInfo() {
@@ -2574,13 +2254,7 @@
         if (!confirm('Bạn có chắc chắn muốn xóa tất cả dữ liệu?')) return;
         state.vaccine.data = [];
         state.vaccine.fileName = '';
-        state.vaccine.filter = { phone: '', name: '', carrier: '', vaccine: '', date: '' };
         document.getElementById('fileName2').innerHTML = '';
-        document.getElementById('filterPhone2').value = '';
-        document.getElementById('filterName2').value = '';
-        document.getElementById('filterCarrier2').value = '';
-        document.getElementById('filterVaccine2').value = '';
-        document.getElementById('filterDate2').value = '';
         renderVaccineTable();
         updateVaccineButtons();
         showToast('Đã xóa dữ liệu', 'info');
@@ -2635,71 +2309,10 @@
         });
     }
 
-    // ===== FILTER EVENTS =====
-    function setupFilterEvents() {
-        // Tab 1
-        document.getElementById('filterName1').addEventListener('input', function() {
-            state.link.filter.name = this.value;
-            renderLinkTable();
-        });
-        document.getElementById('filterPhone1').addEventListener('input', function() {
-            state.link.filter.phone = this.value;
-            renderLinkTable();
-        });
-        document.getElementById('filterCarrier1').addEventListener('change', function() {
-            state.link.filter.carrier = this.value;
-            renderLinkTable();
-        });
-        document.getElementById('filterLink1').addEventListener('change', function() {
-            state.link.filter.link = this.value;
-            renderLinkTable();
-        });
-        document.getElementById('filterClear1').addEventListener('click', function() {
-            state.link.filter = { name: '', phone: '', carrier: '', link: '' };
-            document.getElementById('filterName1').value = '';
-            document.getElementById('filterPhone1').value = '';
-            document.getElementById('filterCarrier1').value = '';
-            document.getElementById('filterLink1').value = '';
-            renderLinkTable();
-        });
-
-        // Tab 2
-        document.getElementById('filterPhone2').addEventListener('input', function() {
-            state.vaccine.filter.phone = this.value;
-            renderVaccineTable();
-        });
-        document.getElementById('filterName2').addEventListener('input', function() {
-            state.vaccine.filter.name = this.value;
-            renderVaccineTable();
-        });
-        document.getElementById('filterCarrier2').addEventListener('change', function() {
-            state.vaccine.filter.carrier = this.value;
-            renderVaccineTable();
-        });
-        document.getElementById('filterVaccine2').addEventListener('input', function() {
-            state.vaccine.filter.vaccine = this.value;
-            renderVaccineTable();
-        });
-        document.getElementById('filterDate2').addEventListener('input', function() {
-            state.vaccine.filter.date = this.value;
-            renderVaccineTable();
-        });
-        document.getElementById('filterClear2').addEventListener('click', function() {
-            state.vaccine.filter = { phone: '', name: '', carrier: '', vaccine: '', date: '' };
-            document.getElementById('filterPhone2').value = '';
-            document.getElementById('filterName2').value = '';
-            document.getElementById('filterCarrier2').value = '';
-            document.getElementById('filterVaccine2').value = '';
-            document.getElementById('filterDate2').value = '';
-            renderVaccineTable();
-        });
-    }
-
     // ===== INIT =====
     function init() {
         setupFileUpload('dropZone1', 'fileInput1', loadLinkFile);
         setupFileUpload('dropZone2', 'fileInput2', loadVaccineFile);
-        setupFilterEvents();
         
         document.getElementById('btnShortenAll').addEventListener('click', shortenAll);
         document.getElementById('btnFixPhone').addEventListener('click', fixPhones);
