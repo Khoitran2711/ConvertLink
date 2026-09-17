@@ -1163,6 +1163,148 @@
             transform: translateX(2px);
         }
 
+        /* ===== COLUMN FILTERS ===== */
+        .filter-row th {
+            background: var(--bg-secondary);
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 41px;
+            z-index: 9;
+        }
+
+        .col-filter {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            min-width: 90px;
+        }
+
+        .col-filter input,
+        .col-filter select {
+            width: 100%;
+            padding: 6px 26px 6px 10px;
+            font-family: inherit;
+            font-size: 11.5px;
+            font-weight: 500;
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            outline: none;
+            transition: all 0.2s ease;
+            text-transform: none;
+            letter-spacing: normal;
+            cursor: text;
+        }
+
+        .col-filter select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            padding-right: 26px;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .col-filter input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .col-filter input:focus,
+        .col-filter select:focus {
+            border-color: var(--primary);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 3px var(--primary-bg);
+        }
+
+        .col-filter.has-value input,
+        .col-filter.has-value select {
+            border-color: var(--primary);
+            background: var(--bg-secondary);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .col-filter .clear-btn {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: none;
+            background: var(--text-muted);
+            color: var(--bg-secondary);
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: all 0.15s ease;
+        }
+
+        .col-filter .clear-btn:hover {
+            background: var(--red);
+            transform: translateY(-50%) scale(1.15);
+        }
+
+        .col-filter.has-value .clear-btn {
+            display: flex;
+        }
+
+        /* Nút xóa tất cả bộ lọc */
+        .filter-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-clear-filters {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-clear-filters:hover {
+            background: var(--red-bg);
+            color: var(--red);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-clear-filters:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .filter-summary {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .filter-summary strong {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
         /* ===== EMPTY STATE ===== */
         .empty {
             text-align: center;
@@ -1193,6 +1335,11 @@
         .empty-text {
             font-size: 12px;
             color: var(--text-muted);
+        }
+
+        .empty.no-result .empty-icon {
+            background: var(--amber-bg);
+            color: var(--amber);
         }
 
         /* ===== TOAST ===== */
@@ -1309,6 +1456,8 @@
             .table-header { flex-direction: column; align-items: flex-start; }
             .toast-wrap { left: 16px; right: 16px; bottom: 16px; }
             .toast { min-width: auto; max-width: none; }
+            .filter-row th { top: 37px; padding: 6px 8px; }
+            .col-filter input, .col-filter select { font-size: 11px; padding: 5px 22px 5px 8px; }
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -1328,7 +1477,7 @@
                 </div>
                 <div class="brand-text">
                     <div class="brand-title">Bệnh viện Đa khoa Ninh Thuận</div>
-                    
+                    <div class="brand-subtitle">Hệ thống SMS</div>
                 </div>
             </div>
 
@@ -1359,7 +1508,6 @@
     </header>
 
     <main class="main">
-        <!-- PAGE HEADER — Tab 1 -->
         <div class="page-header" id="pageHeader1">
             <div class="page-number">01</div>
             <div class="page-title-group">
@@ -1369,7 +1517,6 @@
             </div>
         </div>
 
-        <!-- PAGE HEADER — Tab 2 -->
         <div class="page-header accent-purple" id="pageHeader2" style="display: none;">
             <div class="page-number">02</div>
             <div class="page-title-group">
@@ -1379,7 +1526,6 @@
             </div>
         </div>
 
-        <!-- Stats — chỉ hiện ở tab 1 -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
                 <div class="stat-header">
@@ -1450,11 +1596,16 @@
 
             <div class="table-header">
                 <div class="table-title">📋 Danh sách dữ liệu</div>
-                <div class="table-stats">
-                    <span class="table-stat">Tổng: <strong id="rowCount1">0</strong></span>
-                    <span class="table-stat green">Đã rút: <strong id="shortenedCount1">0</strong></span>
-                    <span class="table-stat red">Lỗi: <strong id="errorCount1">0</strong></span>
+                <div class="filter-actions">
+                    <span class="filter-summary" id="filterSummary1" style="display:none;">Hiển thị <strong id="filteredCount1">0</strong>/<strong id="totalCount1">0</strong> dòng</span>
+                    <button class="btn-clear-filters" id="btnClearFilters1" disabled>✕ Xóa bộ lọc</button>
                 </div>
+            </div>
+
+            <div class="table-stats" style="margin-bottom:12px;">
+                <span class="table-stat">Tổng: <strong id="rowCount1">0</strong></span>
+                <span class="table-stat green">Đã rút: <strong id="shortenedCount1">0</strong></span>
+                <span class="table-stat red">Lỗi: <strong id="errorCount1">0</strong></span>
             </div>
 
             <div class="table-container">
@@ -1467,6 +1618,13 @@
                                 <th>SĐT</th>
                                 <th>Nhà mạng</th>
                                 <th>Link rút gọn</th>
+                            </tr>
+                            <tr class="filter-row">
+                                <th></th>
+                                <th><div class="col-filter" data-col="1"><input type="text" placeholder="Lọc họ tên..." data-filter="hoten1" /><button class="clear-btn" type="button">✕</button></div></th>
+                                <th><div class="col-filter" data-col="2"><input type="text" placeholder="Lọc SĐT..." data-filter="sdt1" /><button class="clear-btn" type="button">✕</button></div></th>
+                                <th><div class="col-filter" data-col="3"><select data-filter="nhamang1"><option value="">Tất cả</option><option value="Viettel">Viettel</option><option value="VinaPhone">VinaPhone</option><option value="MobiFone">MobiFone</option><option value="Vietnamobile">Vietnamobile</option><option value="Khac">Khác</option></select><button class="clear-btn" type="button">✕</button></div></th>
+                                <th><div class="col-filter" data-col="4"><input type="text" placeholder="Lọc link..." data-filter="link1" /><button class="clear-btn" type="button">✕</button></div></th>
                             </tr>
                         </thead>
                         <tbody id="tableBody1">
@@ -1511,11 +1669,16 @@
 
             <div class="table-header">
                 <div class="table-title">📋 Danh sách vaccine</div>
-                <div class="table-stats">
-                    <span class="table-stat">Tổng: <strong id="rowCount2">0</strong></span>
-                    <span class="table-stat green">Hợp lệ: <strong id="validCount2">0</strong></span>
-                    <span class="table-stat red">Lỗi: <strong id="errorCount2">0</strong></span>
+                <div class="filter-actions">
+                    <span class="filter-summary" id="filterSummary2" style="display:none;">Hiển thị <strong id="filteredCount2">0</strong>/<strong id="totalCount2">0</strong> dòng</span>
+                    <button class="btn-clear-filters" id="btnClearFilters2" disabled>✕ Xóa bộ lọc</button>
                 </div>
+            </div>
+
+            <div class="table-stats" style="margin-bottom:12px;">
+                <span class="table-stat">Tổng: <strong id="rowCount2">0</strong></span>
+                <span class="table-stat green">Hợp lệ: <strong id="validCount2">0</strong></span>
+                <span class="table-stat red">Lỗi: <strong id="errorCount2">0</strong></span>
             </div>
 
             <div class="table-container">
@@ -1529,6 +1692,14 @@
                                 <th>Nhà mạng</th>
                                 <th>VACXIN</th>
                                 <th>NGÀY TÁI KHÁM</th>
+                            </tr>
+                            <tr class="filter-row">
+                                <th></th>
+                                <th><div class="col-filter" data-col="1"><input type="text" placeholder="Lọc SĐT..." data-filter="sdt2" /><button class="clear-btn" type="button">✕</button></div></th>
+                                <th><div class="col-filter" data-col="2"><input type="text" placeholder="Lọc họ tên..." data-filter="hoten2" /><button class="clear-btn" type="button">✕</button></div></th>
+                                <th><div class="col-filter" data-col="3"><select data-filter="nhamang2"><option value="">Tất cả</option><option value="Viettel">Viettel</option><option value="VinaPhone">VinaPhone</option><option value="MobiFone">MobiFone</option><option value="Vietnamobile">Vietnamobile</option><option value="Khac">Khác</option></select><button class="clear-btn" type="button">✕</button></div></th>
+                                <th><div class="col-filter" data-col="4"><input type="text" placeholder="Lọc vắc xin..." data-filter="vacxin2" /><button class="clear-btn" type="button">✕</button></div></th>
+                                <th><div class="col-filter" data-col="5"><input type="text" placeholder="Lọc ngày..." data-filter="ngay2" /><button class="clear-btn" type="button">✕</button></div></th>
                             </tr>
                         </thead>
                         <tbody id="tableBody2">
@@ -1571,7 +1742,11 @@
 
     const state = {
         link: { data: [], fileName: '', isProcessing: false },
-        vaccine: { data: [], fileName: '', downloadCount: 0 }
+        vaccine: { data: [], fileName: '', downloadCount: 0 },
+        filters: {
+            hoten1: '', sdt1: '', nhamang1: '', link1: '',
+            sdt2: '', hoten2: '', nhamang2: '', vacxin2: '', ngay2: ''
+        }
     };
 
     function showToast(message, type = 'info', duration = 3500) {
@@ -1609,6 +1784,78 @@
         btn.disabled = processing;
     }
 
+    // Chuẩn hóa chuỗi để tìm kiếm (bỏ dấu, thường hóa)
+    function normalizeSearch(s) {
+        if (!s) return '';
+        return String(s)
+            .toLowerCase()
+            .normalize('NFKD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd');
+    }
+
+    // ===== BỘ LỌC =====
+    function getFilteredLinkData() {
+        const f = state.filters;
+        const nh = f.nhamang1;
+        return state.link.data.filter(r => {
+            if (f.hoten1 && !normalizeSearch(r.HoTen).includes(normalizeSearch(f.hoten1))) return false;
+            if (f.sdt1 && !String(r.SoDT || '').includes(f.sdt1)) return false;
+            if (nh && (r.NhaMang || 'Khac') !== nh) return false;
+            if (f.link1 && !normalizeSearch(r.linkRutGon).includes(normalizeSearch(f.link1))) return false;
+            return true;
+        });
+    }
+
+    function getFilteredVaccineData() {
+        const f = state.filters;
+        const nh = f.nhamang2;
+        return state.vaccine.data.filter(r => {
+            if (f.sdt2 && !String(r.SoDT || '').includes(f.sdt2)) return false;
+            if (f.hoten2 && !normalizeSearch(r.ho_ten).includes(normalizeSearch(f.hoten2))) return false;
+            if (nh && (r.NhaMang || 'Khac') !== nh) return false;
+            if (f.vacxin2 && !normalizeSearch(r.VACXIN).includes(normalizeSearch(f.vacxin2))) return false;
+            if (f.ngay2 && !normalizeSearch(r.NGAYTAIKHAM).includes(normalizeSearch(f.ngay2))) return false;
+            return true;
+        });
+    }
+
+    function updateFilterUI() {
+        // Cập nhật class has-value cho các ô filter
+        document.querySelectorAll('.col-filter').forEach(el => {
+            const input = el.querySelector('input, select');
+            if (!input) return;
+            const val = input.value || '';
+            el.classList.toggle('has-value', val !== '');
+        });
+
+        // Tab 1
+        const f1Active = state.filters.hoten1 || state.filters.sdt1 || state.filters.nhamang1 || state.filters.link1;
+        const filtered1 = getFilteredLinkData();
+        document.getElementById('btnClearFilters1').disabled = !f1Active;
+        const summary1 = document.getElementById('filterSummary1');
+        if (f1Active) {
+            summary1.style.display = 'inline';
+            document.getElementById('filteredCount1').textContent = filtered1.length;
+            document.getElementById('totalCount1').textContent = state.link.data.length;
+        } else {
+            summary1.style.display = 'none';
+        }
+
+        // Tab 2
+        const f2Active = state.filters.sdt2 || state.filters.hoten2 || state.filters.nhamang2 || state.filters.vacxin2 || state.filters.ngay2;
+        const filtered2 = getFilteredVaccineData();
+        document.getElementById('btnClearFilters2').disabled = !f2Active;
+        const summary2 = document.getElementById('filterSummary2');
+        if (f2Active) {
+            summary2.style.display = 'inline';
+            document.getElementById('filteredCount2').textContent = filtered2.length;
+            document.getElementById('totalCount2').textContent = state.vaccine.data.length;
+        } else {
+            summary2.style.display = 'none';
+        }
+    }
+
     function switchTab(tabId) {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
         document.querySelectorAll('.content-card').forEach(c => c.classList.toggle('active', c.id === tabId));
@@ -1631,6 +1878,56 @@
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
+
+    // ===== GẮN SỰ KIỆN CHO CÁC Ô FILTER =====
+    function bindFilters() {
+        document.querySelectorAll('.col-filter').forEach(el => {
+            const input = el.querySelector('input, select');
+            const clearBtn = el.querySelector('.clear-btn');
+            if (!input) return;
+
+            const filterKey = input.dataset.filter;
+            if (!filterKey) return;
+
+            const handler = () => {
+                state.filters[filterKey] = input.value || '';
+                if (filterKey.startsWith('sdt') || filterKey.startsWith('hoten') || filterKey.startsWith('link') || filterKey.startsWith('vacxin') || filterKey.startsWith('ngay') || filterKey.startsWith('nhamang')) {
+                    if (filterKey.endsWith('1')) renderLinkTable();
+                    else if (filterKey.endsWith('2')) renderVaccineTable();
+                }
+                updateFilterUI();
+            };
+
+            input.addEventListener('input', handler);
+            input.addEventListener('change', handler);
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    input.value = '';
+                    state.filters[filterKey] = '';
+                    if (filterKey.endsWith('1')) renderLinkTable();
+                    else if (filterKey.endsWith('2')) renderVaccineTable();
+                    updateFilterUI();
+                });
+            }
+        });
+
+        // Nút xóa tất cả filter
+        document.getElementById('btnClearFilters1').addEventListener('click', () => {
+            ['hoten1','sdt1','nhamang1','link1'].forEach(k => state.filters[k] = '');
+            document.querySelectorAll('#tab1 .col-filter input, #tab1 .col-filter select').forEach(i => i.value = '');
+            renderLinkTable();
+            updateFilterUI();
+        });
+
+        document.getElementById('btnClearFilters2').addEventListener('click', () => {
+            ['sdt2','hoten2','nhamang2','vacxin2','ngay2'].forEach(k => state.filters[k] = '');
+            document.querySelectorAll('#tab2 .col-filter input, #tab2 .col-filter select').forEach(i => i.value = '');
+            renderVaccineTable();
+            updateFilterUI();
+        });
+    }
 
     const themeToggle = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
@@ -1736,13 +2033,16 @@
         return `${base}.xlsx`;
     }
 
+    // ===== RENDER LINK TABLE (CÓ LỌC) =====
     function renderLinkTable() {
-        const data = state.link.data;
+        const allData = state.link.data;
+        const data = getFilteredLinkData();
         const tbody = document.getElementById('tableBody1');
         const progress = document.getElementById('progress1');
         const progressText = document.getElementById('progressText1');
+        const filterActive = state.filters.hoten1 || state.filters.sdt1 || state.filters.nhamang1 || state.filters.link1;
         
-        if (!data.length) {
+        if (!allData.length) {
             tbody.innerHTML = `<tr><td colspan="5">
                 <div class="empty">
                     <div class="empty-icon">📋</div>
@@ -1754,6 +2054,20 @@
             updateLinkTableInfo();
             progress.style.width = '0%';
             progressText.textContent = '0%';
+            return;
+        }
+
+        if (!data.length) {
+            tbody.innerHTML = `<tr><td colspan="5">
+                <div class="empty no-result">
+                    <div class="empty-icon">🔍</div>
+                    <div class="empty-title">Không có kết quả phù hợp</div>
+                    <div class="empty-text">Thử xóa bộ lọc để xem tất cả dữ liệu</div>
+                </div>
+            </td></tr>`;
+            updateStats();
+            updateLinkTableInfo();
+            updateFilterUI();
             return;
         }
 
@@ -1797,15 +2111,16 @@
         }
         tbody.innerHTML = html;
         
-        const total = data.length;
-        const done = data.filter(r => r.status === 'done').length;
-        const error = data.filter(r => r.status === 'error').length;
+        const total = allData.length;
+        const done = allData.filter(r => r.status === 'done').length;
+        const error = allData.filter(r => r.status === 'error').length;
         const progressPercent = total ? Math.round(((done + error) / total) * 100) : 0;
         progress.style.width = progressPercent + '%';
         progressText.textContent = progressPercent + '%';
         
         updateStats();
         updateLinkTableInfo();
+        updateFilterUI();
     }
 
     function updateLinkTableInfo() {
@@ -2043,16 +2358,22 @@
         state.link.data = [];
         state.link.fileName = '';
         document.getElementById('fileName1').innerHTML = '';
+        ['hoten1','sdt1','nhamang1','link1'].forEach(k => state.filters[k] = '');
+        document.querySelectorAll('#tab1 .col-filter input, #tab1 .col-filter select').forEach(i => i.value = '');
         renderLinkTable();
         updateButtons();
+        updateFilterUI();
         showToast('Đã xóa dữ liệu', 'info');
     }
 
+    // ===== RENDER VACCINE TABLE (CÓ LỌC) =====
     function renderVaccineTable() {
-        const data = state.vaccine.data;
+        const allData = state.vaccine.data;
+        const data = getFilteredVaccineData();
         const tbody = document.getElementById('tableBody2');
+        const filterActive = state.filters.sdt2 || state.filters.hoten2 || state.filters.nhamang2 || state.filters.vacxin2 || state.filters.ngay2;
         
-        if (!data.length) {
+        if (!allData.length) {
             tbody.innerHTML = `<tr><td colspan="6">
                 <div class="empty">
                     <div class="empty-icon">💉</div>
@@ -2061,6 +2382,20 @@
                 </div>
             </td></tr>`;
             updateVaccineTableInfo();
+            updateFilterUI();
+            return;
+        }
+
+        if (!data.length) {
+            tbody.innerHTML = `<tr><td colspan="6">
+                <div class="empty no-result">
+                    <div class="empty-icon">🔍</div>
+                    <div class="empty-title">Không có kết quả phù hợp</div>
+                    <div class="empty-text">Thử xóa bộ lọc để xem tất cả dữ liệu</div>
+                </div>
+            </td></tr>`;
+            updateVaccineTableInfo();
+            updateFilterUI();
             return;
         }
 
@@ -2095,6 +2430,7 @@
         }
         tbody.innerHTML = html;
         updateVaccineTableInfo();
+        updateFilterUI();
     }
 
     function updateVaccineTableInfo() {
@@ -2281,8 +2617,11 @@
         state.vaccine.data = [];
         state.vaccine.fileName = '';
         document.getElementById('fileName2').innerHTML = '';
+        ['sdt2','hoten2','nhamang2','vacxin2','ngay2'].forEach(k => state.filters[k] = '');
+        document.querySelectorAll('#tab2 .col-filter input, #tab2 .col-filter select').forEach(i => i.value = '');
         renderVaccineTable();
         updateVaccineButtons();
+        updateFilterUI();
         showToast('Đã xóa dữ liệu', 'info');
     }
 
@@ -2336,6 +2675,7 @@
     function init() {
         setupFileUpload('dropZone1', 'fileInput1', loadLinkFile);
         setupFileUpload('dropZone2', 'fileInput2', loadVaccineFile);
+        bindFilters();
         
         document.getElementById('btnShortenAll').addEventListener('click', shortenAll);
         document.getElementById('btnFixPhone').addEventListener('click', fixPhones);
@@ -2360,6 +2700,7 @@
         renderVaccineTable();
         updateButtons();
         updateVaccineButtons();
+        updateFilterUI();
         
         console.log('🏥 Hệ thống SMS Bệnh viện Đa khoa Ninh Thuận đã sẵn sàng!');
     }
