@@ -12,7 +12,6 @@
             --bg-primary: #f5f7fb;
             --bg-secondary: #ffffff;
             --bg-tertiary: #eef2f9;
-            --bg-glass: rgba(255, 255, 255, 0.7);
             --text-primary: #0f172a;
             --text-secondary: #475569;
             --text-muted: #94a3b8;
@@ -55,7 +54,6 @@
             --bg-primary: #0a0f1e;
             --bg-secondary: #111827;
             --bg-tertiary: #1e293b;
-            --bg-glass: rgba(17, 24, 39, 0.7);
             --text-primary: #f1f5f9;
             --text-secondary: #cbd5e1;
             --text-muted: #64748b;
@@ -105,7 +103,6 @@
                 radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
         }
 
-        /* ===== LAYOUT ===== */
         .app {
             position: relative;
             z-index: 1;
@@ -144,16 +141,25 @@
         }
 
         .brand-icon {
-            width: 42px;
-            height: 42px;
+            width: 46px;
+            height: 46px;
             border-radius: var(--radius-md);
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+            overflow: hidden;
             flex-shrink: 0;
+            border: 1px solid var(--border-color);
+            padding: 2px;
+        }
+
+        .brand-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border-radius: var(--radius-sm);
         }
 
         .brand-text {
@@ -164,22 +170,23 @@
         }
 
         .brand-title {
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 800;
             color: var(--text-primary);
             line-height: 1.2;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
+            white-space: nowrap;
         }
 
         .brand-subtitle {
             font-size: 10px;
-            color: var(--text-muted);
-            font-weight: 500;
+            color: var(--primary);
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
+            margin-top: 2px;
         }
 
-        /* ===== HORIZONTAL TABS ===== */
         .tabs-nav {
             display: flex;
             align-items: center;
@@ -254,7 +261,6 @@
             color: #fff;
         }
 
-        /* ===== HEADER ACTIONS ===== */
         .header-actions {
             display: flex;
             align-items: center;
@@ -341,32 +347,79 @@
         /* ===== PAGE HEADER ===== */
         .page-header {
             display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 24px;
-            margin-bottom: 24px;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 18px 24px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
             flex-wrap: wrap;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+        }
+
+        .page-header.accent-purple::before {
+            background: linear-gradient(180deg, var(--purple), #a78bfa);
+        }
+
+        .page-number {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 6px 16px rgba(13, 148, 136, 0.3);
+            letter-spacing: -0.02em;
+        }
+
+        .page-header.accent-purple .page-number {
+            background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
         }
 
         .page-title-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
+            flex: 1;
+            min-width: 0;
         }
 
         .page-eyebrow {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 10px;
+            font-weight: 800;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.1em;
+        }
+
+        .page-header.accent-purple .page-eyebrow {
+            color: var(--purple);
         }
 
         .page-title {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 800;
             color: var(--text-primary);
             letter-spacing: -0.02em;
@@ -374,12 +427,11 @@
         }
 
         .page-subtitle {
-            font-size: 13px;
+            font-size: 12.5px;
             color: var(--text-secondary);
-            max-width: 640px;
         }
 
-        /* ===== STATS (COMPACT & HIGHLIGHT) ===== */
+        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -400,7 +452,6 @@
             box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
         }
 
-        /* Màu nền và viền riêng cho từng loại ô */
         .stat-card:nth-child(1) { background: linear-gradient(135deg, rgba(13, 148, 136, 0.06), rgba(13, 148, 136, 0.12)); border-color: rgba(13, 148, 136, 0.2); }
         .stat-card:nth-child(2) { background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(59, 130, 246, 0.12)); border-color: rgba(59, 130, 246, 0.2); }
         .stat-card:nth-child(3) { background: linear-gradient(135deg, rgba(239, 68, 68, 0.06), rgba(239, 68, 68, 0.12)); border-color: rgba(239, 68, 68, 0.2); }
@@ -414,9 +465,7 @@
         .stat-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 3px;
             background: currentColor;
             opacity: 0.6;
@@ -455,7 +504,6 @@
         [data-theme="dark"] .stat-card:nth-child(1) .stat-label { color: var(--primary-light); }
         [data-theme="dark"] .stat-card:nth-child(2) .stat-label { color: #60a5fa; }
         [data-theme="dark"] .stat-card:nth-child(3) .stat-label { color: #f87171; }
-        [data-theme="dark"] .stat-card:nth-child(4) .stat-label { color: var(--text-primary); }
 
         .stat-icon {
             width: 32px;
@@ -514,7 +562,7 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-2xl);
-            padding: 28px;
+            padding: 24px;
             box-shadow: var(--shadow-md);
             display: none;
             animation: fadeInUp 0.4s ease;
@@ -529,53 +577,12 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .card-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 20px;
-            padding-bottom: 18px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .card-number {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-md);
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 800;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
-        }
-
-        .card-title-group {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-            letter-spacing: -0.01em;
-        }
-
-        .card-subtitle {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        /* ===== UPLOAD ZONE (COMPACT) ===== */
+        /* ===== UPLOAD ZONE ===== */
         .upload-zone {
-            background: var(--bg-tertiary);
-            border: 1.5px dashed var(--border-strong);
+            background: linear-gradient(135deg,
+                rgba(13, 148, 136, 0.06),
+                rgba(59, 130, 246, 0.06));
+            border: 2px dashed var(--primary);
             border-radius: var(--radius-md);
             padding: 14px 20px;
             cursor: pointer;
@@ -586,6 +593,36 @@
             align-items: center;
             gap: 14px;
             text-align: left;
+            animation: uploadPulse 2.2s ease-in-out infinite;
+        }
+
+        @keyframes uploadPulse {
+            0%, 100% {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.35);
+            }
+            50% {
+                border-color: var(--primary-light);
+                box-shadow: 0 0 0 6px rgba(13, 148, 136, 0.08);
+            }
+        }
+
+        #dropZone2 {
+            border-color: var(--purple);
+            background: linear-gradient(135deg,
+                rgba(124, 58, 237, 0.06),
+                rgba(59, 130, 246, 0.06));
+            animation: uploadPulsePurple 2.2s ease-in-out infinite;
+        }
+        @keyframes uploadPulsePurple {
+            0%, 100% {
+                border-color: var(--purple);
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.35);
+            }
+            50% {
+                border-color: #a78bfa;
+                box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.08);
+            }
         }
 
         .upload-zone::before {
@@ -599,19 +636,26 @@
         }
 
         .upload-zone:hover {
-            border-color: var(--primary);
+            border-color: var(--primary-dark);
             background: var(--primary-bg);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(13, 148, 136, 0.2);
+            animation: none;
         }
 
-        .upload-zone:hover::before {
-            opacity: 1;
+        #dropZone2:hover {
+            border-color: var(--purple-dark);
+            background: var(--purple-bg);
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.2);
         }
+
+        .upload-zone:hover::before { opacity: 1; }
 
         .upload-zone.dragover {
             border-color: var(--primary);
             background: var(--primary-bg);
-            transform: scale(1.005);
+            transform: scale(1.01);
+            animation: none;
         }
 
         .upload-icon {
@@ -623,15 +667,40 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            box-shadow: 0 4px 10px rgba(13, 148, 136, 0.25);
+            box-shadow: 0 4px 14px rgba(13, 148, 136, 0.45);
             transition: transform 0.3s ease;
             position: relative;
             z-index: 1;
             flex-shrink: 0;
+            animation: iconBob 2.2s ease-in-out infinite;
         }
 
+        @keyframes iconBob {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-3px); }
+        }
+
+        .upload-icon::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: inherit;
+            border: 2px solid var(--primary);
+            opacity: 0;
+            animation: iconRing 2.2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes iconRing {
+            0%   { opacity: 0.6; transform: scale(0.95); }
+            100% { opacity: 0;   transform: scale(1.6); }
+        }
+
+        #dropZone2 .upload-icon::after { border-color: var(--purple); }
+
         .upload-zone:hover .upload-icon {
-            transform: translateY(-2px) scale(1.05);
+            transform: translateY(-3px) scale(1.1);
+            animation: none;
         }
 
         .upload-content {
@@ -646,30 +715,52 @@
 
         .upload-title {
             font-size: 13px;
-            font-weight: 700;
-            color: var(--text-primary);
+            font-weight: 800;
+            color: var(--primary);
             line-height: 1.3;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #dropZone2 .upload-title { color: var(--purple); }
+
+        .upload-title::before {
+            content: '👉';
+            font-size: 14px;
+            animation: pointBounce 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pointBounce {
+            0%, 100% { transform: translateX(0); }
+            50%      { transform: translateX(4px); }
         }
 
         .upload-hint {
             font-size: 11px;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             line-height: 1.3;
+            font-weight: 600;
         }
 
         .upload-arrow {
             font-size: 16px;
-            color: var(--text-muted);
+            color: var(--primary);
             transition: transform 0.25s ease;
             position: relative;
             z-index: 1;
             flex-shrink: 0;
+            font-weight: 800;
         }
 
+        #dropZone2 .upload-arrow { color: var(--purple); }
+
         .upload-zone:hover .upload-arrow {
-            transform: translateX(4px);
-            color: var(--primary);
+            transform: translateX(6px) scale(1.2);
+            color: var(--primary-dark);
         }
+
+        #dropZone2:hover .upload-arrow { color: var(--purple-dark); }
 
         .upload-filename {
             display: inline-flex;
@@ -686,6 +777,8 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
+        #dropZone2 .upload-filename { background: var(--purple); }
 
         .upload-info {
             display: flex;
@@ -725,6 +818,7 @@
             position: relative;
             overflow: hidden;
             letter-spacing: -0.01em;
+            text-decoration: none;
         }
 
         .btn:disabled {
@@ -767,17 +861,6 @@
         }
         .btn-purple:not(:disabled):hover {
             box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
-        }
-
-        .btn-ghost {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-        }
-        .btn-ghost:not(:disabled):hover {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border-color: var(--border-strong);
         }
 
         .btn-danger {
@@ -1182,21 +1265,15 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
-            .header-inner {
-                padding: 12px 20px;
-            }
-            .main {
-                padding: 20px;
-            }
+            .header-inner { padding: 12px 20px; }
+            .main { padding: 20px; }
             .tabs-nav {
                 order: 3;
                 width: 100%;
                 justify-content: flex-start;
                 margin-top: 4px;
             }
-            .nav-btn.active::after {
-                bottom: -8px;
-            }
+            .nav-btn.active::after { bottom: -8px; }
         }
 
         @media (max-width: 768px) {
@@ -1205,6 +1282,7 @@
                 align-items: flex-start;
                 gap: 12px;
             }
+            .brand-title { font-size: 14px; white-space: normal; }
             .tabs-nav {
                 width: 100%;
                 justify-content: flex-start;
@@ -1216,49 +1294,21 @@
                 width: 100%;
                 justify-content: space-between;
             }
-            .nav-btn {
-                padding: 8px 14px;
-                font-size: 12px;
-            }
-            .page-title {
-                font-size: 20px;
-            }
-            .stat-value {
-                font-size: 22px;
-            }
-            .stats-grid {
-                gap: 8px;
-            }
-            .stat-card {
-                padding: 10px 12px;
-            }
-            .stat-label, .stat-footer {
-                font-size: 9px;
-            }
-            .stat-icon {
-                width: 28px;
-                height: 28px;
-                font-size: 14px;
-            }
-            .content-card {
-                padding: 20px;
-            }
-            .action-grid {
-                grid-template-columns: 1fr;
-            }
-            .table-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .toast-wrap {
-                left: 16px;
-                right: 16px;
-                bottom: 16px;
-            }
-            .toast {
-                min-width: auto;
-                max-width: none;
-            }
+            .nav-btn { padding: 8px 14px; font-size: 12px; }
+            .page-header { padding: 14px 16px; gap: 12px; }
+            .page-number { width: 44px; height: 44px; font-size: 18px; }
+            .page-title { font-size: 17px; }
+            .page-subtitle { font-size: 11.5px; }
+            .stat-value { font-size: 22px; }
+            .stats-grid { gap: 8px; }
+            .stat-card { padding: 10px 12px; }
+            .stat-label, .stat-footer { font-size: 9px; }
+            .stat-icon { width: 28px; height: 28px; font-size: 14px; }
+            .content-card { padding: 16px; }
+            .action-grid { grid-template-columns: 1fr; }
+            .table-header { flex-direction: column; align-items: flex-start; }
+            .toast-wrap { left: 16px; right: 16px; bottom: 16px; }
+            .toast { min-width: auto; max-width: none; }
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -1270,14 +1320,15 @@
 <body>
 
 <div class="app">
-    <!-- Top Header with Horizontal Tabs -->
     <header class="top-header">
         <div class="header-inner">
             <div class="brand">
-                <div class="brand-icon">🏥</div>
+                <div class="brand-icon">
+                    <img src="https://raw.githubusercontent.com/Khoitran2711/ConvertLink/main/logoBVT.png" alt="Logo Bệnh viện Đa khoa Ninh Thuận" />
+                </div>
                 <div class="brand-text">
-                    <div class="brand-title">Bệnh viện Đa khoa</div>
-                    <div class="brand-subtitle">Ninh Thuận</div>
+                    <div class="brand-title">Bệnh viện Đa khoa Ninh Thuận</div>
+                    
                 </div>
             </div>
 
@@ -1307,18 +1358,28 @@
         </div>
     </header>
 
-    <!-- Main -->
     <main class="main">
-        <!-- Page Header -->
-        <div class="page-header">
+        <!-- PAGE HEADER — Tab 1 -->
+        <div class="page-header" id="pageHeader1">
+            <div class="page-number">01</div>
             <div class="page-title-group">
-                <div class="page-eyebrow" id="pageEyebrow">🔗 CHỨC NĂNG 01</div>
-                <h1 class="page-title" id="pageTitle">Rút gọn link Google Drive</h1>
-                <p class="page-subtitle" id="pageSubtitle">Tải file Excel chứa link Google Drive để rút gọn và phân loại theo nhà mạng.</p>
+                <div class="page-eyebrow">🔗 CHỨC NĂNG 01</div>
+                <h1 class="page-title">Rút gọn link Google Drive</h1>
+                <p class="page-subtitle">Tải file Excel chứa link Google Drive để rút gọn và phân loại theo nhà mạng.</p>
             </div>
         </div>
 
-        <!-- Stats -->
+        <!-- PAGE HEADER — Tab 2 -->
+        <div class="page-header accent-purple" id="pageHeader2" style="display: none;">
+            <div class="page-number">02</div>
+            <div class="page-title-group">
+                <div class="page-eyebrow">💉 CHỨC NĂNG 02</div>
+                <h1 class="page-title">Xử lý danh sách tiêm chủng</h1>
+                <p class="page-subtitle">Tải báo cáo tiêm chủng để tạo danh sách nhắc lịch hẹn tái khám theo nhà mạng.</p>
+            </div>
+        </div>
+
+        <!-- Stats — chỉ hiện ở tab 1 -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
                 <div class="stat-header">
@@ -1356,14 +1417,6 @@
 
         <!-- TAB 1 -->
         <div class="content-card active" id="tab1">
-            <div class="card-header">
-                <div class="card-number">01</div>
-                <div class="card-title-group">
-                    <div class="card-title">🔗 Rút gọn link Google Drive</div>
-                    <div class="card-subtitle">Tải file Excel chứa link Google Drive để rút gọn và phân loại theo nhà mạng.</div>
-                </div>
-            </div>
-
             <div class="upload-zone" id="dropZone1">
                 <div class="upload-icon">📂</div>
                 <div class="upload-content">
@@ -1432,16 +1485,8 @@
 
         <!-- TAB 2 -->
         <div class="content-card" id="tab2">
-            <div class="card-header">
-                <div class="card-number" style="background: linear-gradient(135deg, var(--purple), var(--purple-dark)); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);">02</div>
-                <div class="card-title-group">
-                    <div class="card-title">💉 Xử lý danh sách tiêm chủng</div>
-                    <div class="card-subtitle">Tải báo cáo tiêm chủng để tạo danh sách nhắc lịch hẹn tái khám theo nhà mạng.</div>
-                </div>
-            </div>
-
             <div class="upload-zone" id="dropZone2">
-                <div class="upload-icon" style="background: linear-gradient(135deg, var(--purple), var(--purple-dark)); box-shadow: 0 4px 10px rgba(124, 58, 237, 0.25);">📂</div>
+                <div class="upload-icon">📂</div>
                 <div class="upload-content">
                     <div class="upload-title">Chọn file Excel vaccine</div>
                     <div class="upload-hint">Kéo thả hoặc nhấp để chọn · .xlsx</div>
@@ -1502,10 +1547,8 @@
     </main>
 </div>
 
-<!-- Toast -->
 <div class="toast-wrap" id="toastWrap"></div>
 
-<!-- Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -1514,7 +1557,6 @@
 (function() {
     'use strict';
 
-    // Fallback FileSaver
     if (typeof saveAs === 'undefined') {
         window.saveAs = function(blob, filename) {
             const link = document.createElement('a');
@@ -1527,13 +1569,11 @@
         };
     }
 
-    // ===== STATE =====
     const state = {
         link: { data: [], fileName: '', isProcessing: false },
         vaccine: { data: [], fileName: '', downloadCount: 0 }
     };
 
-    // ===== TOAST =====
     function showToast(message, type = 'info', duration = 3500) {
         const wrap = document.getElementById('toastWrap');
         const toast = document.createElement('div');
@@ -1569,25 +1609,22 @@
         btn.disabled = processing;
     }
 
-    // ===== TABS =====
     function switchTab(tabId) {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
         document.querySelectorAll('.content-card').forEach(c => c.classList.toggle('active', c.id === tabId));
         
-        const eyebrow = document.getElementById('pageEyebrow');
-        const title = document.getElementById('pageTitle');
-        const subtitle = document.getElementById('pageSubtitle');
+        const header1 = document.getElementById('pageHeader1');
+        const header2 = document.getElementById('pageHeader2');
+        const statsGrid = document.getElementById('statsGrid');
         
         if (tabId === 'tab1') {
-            eyebrow.textContent = '🔗 CHỨC NĂNG 01';
-            title.textContent = 'Rút gọn link Google Drive';
-            subtitle.textContent = 'Tải file Excel chứa link Google Drive để rút gọn và phân loại theo nhà mạng.';
-            document.getElementById('statsGrid').style.display = 'grid';
+            header1.style.display = 'flex';
+            header2.style.display = 'none';
+            statsGrid.style.display = 'grid';
         } else {
-            eyebrow.textContent = '💉 CHỨC NĂNG 02';
-            title.textContent = 'Xử lý danh sách tiêm chủng';
-            subtitle.textContent = 'Tải báo cáo tiêm chủng để tạo danh sách nhắc lịch hẹn tái khám theo nhà mạng.';
-            document.getElementById('statsGrid').style.display = 'none';
+            header1.style.display = 'none';
+            header2.style.display = 'flex';
+            statsGrid.style.display = 'none';
         }
     }
 
@@ -1595,7 +1632,6 @@
         btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
 
-    // Theme toggle
     const themeToggle = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -1621,7 +1657,6 @@
         }
     }
 
-    // ===== REMOVE ACCENTS =====
     function removeAccents(s) {
         if (!s || typeof s !== 'string') return '';
         return s.normalize('NFKD')
@@ -1630,7 +1665,6 @@
             .replace(/Đ/g, 'D');
     }
 
-    // ===== FORMAT PHONE =====
     function formatPhone(phoneVal) {
         if (!phoneVal || String(phoneVal).trim() === '') return { phone: null, isValid: false, isError: false };
         let phoneStr = String(phoneVal).split('.')[0].trim();
@@ -1653,7 +1687,6 @@
         return { phone: phoneDigits, isValid, isError };
     }
 
-    // ===== GET NETWORK =====
     function getNetwork(phone) {
         if (!phone || phone.length < 5) return 'Khac';
         let p = String(phone).replace(/[^0-9]/g, '');
@@ -1703,7 +1736,6 @@
         return `${base}.xlsx`;
     }
 
-    // ===== RENDER LINK TABLE =====
     function renderLinkTable() {
         const data = state.link.data;
         const tbody = document.getElementById('tableBody1');
@@ -1784,7 +1816,6 @@
         document.getElementById('badgeLink').textContent = data.length;
     }
 
-    // ===== LOAD LINK FILE =====
     function loadLinkFile(file) {
         if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
             showToast('Vui lòng chọn file Excel (.xlsx hoặc .xls)', 'error');
@@ -1865,7 +1896,6 @@
         reader.readAsArrayBuffer(file);
     }
 
-    // ===== SHORTEN =====
     async function shortenLink(link) {
         if (!link) return { success: false };
         try {
@@ -1930,7 +1960,6 @@
         showToast(`Hoàn thành: ${success} thành công, ${fail} lỗi`, success > 0 ? 'success' : 'error');
     }
 
-    // ===== FIX PHONES =====
     function fixPhones() {
         const data = state.link.data;
         if (!data.length) { showToast('Không có dữ liệu', 'error'); return; }
@@ -1965,7 +1994,6 @@
         showToast(msg, 'success');
     }
 
-    // ===== EXPORT ZIP LINK =====
     function exportZipLink() {
         const validData = state.link.data.filter(r => r.phoneStatus === 'valid' && r.linkRutGon && r.SoDT);
         const errorData = state.link.data.filter(r => r.phoneError && r.linkRutGon && r.SoDT);
@@ -2009,7 +2037,6 @@
         } catch (e) { showToast('Lỗi: ' + e.message, 'error'); }
     }
 
-    // ===== CLEAR =====
     function clearDataLink() {
         if (!state.link.data.length) return;
         if (!confirm('Bạn có chắc chắn muốn xóa tất cả dữ liệu?')) return;
@@ -2021,7 +2048,6 @@
         showToast('Đã xóa dữ liệu', 'info');
     }
 
-    // ===== VACCINE =====
     function renderVaccineTable() {
         const data = state.vaccine.data;
         const tbody = document.getElementById('tableBody2');
@@ -2260,7 +2286,6 @@
         showToast('Đã xóa dữ liệu', 'info');
     }
 
-    // ===== UPDATE =====
     function updateStats() {
         const data = state.link.data;
         document.getElementById('statShortened').textContent = data.filter(r => r.status === 'done').length;
@@ -2284,7 +2309,6 @@
         document.getElementById('btnClearData2').disabled = !hasData;
     }
 
-    // ===== FILE UPLOAD =====
     function setupFileUpload(dropZoneId, fileInputId, loadFn) {
         const dropZone = document.getElementById(dropZoneId);
         const fileInput = document.getElementById(fileInputId);
@@ -2309,7 +2333,6 @@
         });
     }
 
-    // ===== INIT =====
     function init() {
         setupFileUpload('dropZone1', 'fileInput1', loadLinkFile);
         setupFileUpload('dropZone2', 'fileInput2', loadVaccineFile);
